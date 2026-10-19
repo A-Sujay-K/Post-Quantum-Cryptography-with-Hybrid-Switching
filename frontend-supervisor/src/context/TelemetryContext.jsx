@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
 import { createTelemetryConnection } from '../services/ws';
 import { fetchTelemetrySnapshot } from '../services/api';
 
@@ -9,9 +9,23 @@ export const TelemetryProvider = ({ children }) => {
   const [history, setHistory] = useState([]);
   const [events, setEvents] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [laneFilter, setLaneFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState('Dashboard');
+  const [policyConfig, setPolicyConfig] = useState({
+    mode: 'adaptive', // 'adaptive' | 'force_standard' | 'force_critical'
+    threshold: 0.70,
+  });
+
+  const isPausedRef = useRef(isPaused);
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
 
   const handleMessage = useCallback((payload, timestamp) => {
     if (!payload || typeof payload !== 'object' || !payload.key_pool) return;
+    if (isPausedRef.current) return; // Frozen when paused
+
     const payloadWithTime = { ...payload, timestamp };
     
     setSnapshot(payloadWithTime);
@@ -30,27 +44,60 @@ export const TelemetryProvider = ({ children }) => {
     }
   }, []);
 
+  const refetchSnapshot = useCallback(async () => {
+    try {
+      const data = await fetchTelemetrySnapshot();
+      if (data && typeof data === 'object' && data.key_pool) {
+        setSnapshot(data);
+        if (Array.isArray(data.recent_events)) {
+          setEvents((prev) => {
+            const combined = [...data.recent_events, ...prev];
+            const seen = new Set();
+            return combined.filter((e) => {
+              const id = e.event_id || e._id || `${e.timestamp}-${e.payload?.message_id}`;
+              if (seen.has(id)) return false;
+              seen.add(id);
+              return true;
+            }).slice(0, 100);
+          });
+        }
+        return data;
+      }
+    } catch (err) {
+      console.error('Failed to refetch telemetry snapshot:', err);
+    }
+    return null;
+  }, []);
+
+  const togglePause = useCallback(() => {
+    setIsPaused((prev) => !prev);
+  }, []);
+
   useEffect(() => {
     // Initial fetch
-    fetchTelemetrySnapshot().then(data => {
-      if (data && typeof data === 'object' && data.key_pool) {
-        setSnapshot(prev => prev || data);
-        if (Array.isArray(data.recent_events)) setEvents(data.recent_events);
-      }
-    }).catch(err => console.error('Failed initial fetch:', err));
+    refetchSnapshot();
 
     const connection = createTelemetryConnection(handleMessage, setIsConnected);
 
     return () => {
       connection.disconnect();
     };
-  }, [handleMessage]);
+  }, [handleMessage, refetchSnapshot]);
 
   const value = {
     snapshot,
     history,
     events,
     isConnected,
+    isPaused,
+    togglePause,
+    refetchSnapshot,
+    laneFilter,
+    setLaneFilter,
+    policyConfig,
+    setPolicyConfig,
+    activeTab,
+    setActiveTab,
   };
 
   return (

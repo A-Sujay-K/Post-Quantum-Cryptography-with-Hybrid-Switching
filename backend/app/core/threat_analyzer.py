@@ -41,7 +41,7 @@ def compute_dynamic_threshold(available_keys: int, settings: Settings) -> float:
     a(t) = A_K(t) / K_max
     tau_eff(a) = tau_min + (tau_max - tau_min) * (1 - a)
     """
-    k_max = settings.K_MAX if settings.K_MAX > 0 else 20
+    k_max = settings.K_MAX if settings.K_MAX > 0 else 25
     a = max(0.0, min(1.0, available_keys / k_max))
     tau_eff = settings.TAU_MIN + (settings.TAU_MAX - settings.TAU_MIN) * (1.0 - a)
     return round(tau_eff, 4)

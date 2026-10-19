@@ -1,19 +1,39 @@
 import React from 'react';
 
+/**
+ * Toggle — visionOS / macOS styled toggle switch
+ * Smooth spring transition, clear active states, accessible focus
+ */
 const Toggle = ({ checked, onChange, label, className = '' }) => {
   return (
-    <label className={`flex items-center cursor-pointer ${className}`}>
-      {label && <span className="mr-3 text-sm font-medium text-gray-300">{label}</span>}
-      <div className="relative">
+    <label className={`inline-flex items-center gap-3 cursor-pointer select-none ${className}`}>
+      {label && <span className="text-xs font-medium text-[var(--text-secondary)]">{label}</span>}
+      <div className="relative inline-flex items-center">
         <input 
           type="checkbox" 
-          className="sr-only" 
+          className="sr-only peer" 
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
         />
-        <div className={`block w-14 h-8 rounded-full transition-all duration-300 ${checked ? 'bg-accent-gold/20 border border-accent-gold/50 shadow-[0_0_10px_rgba(255,215,0,0.3)]' : 'bg-white/10 border border-white/20'}`}></div>
-        <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 flex items-center justify-center ${checked ? 'transform translate-x-6 bg-accent-gold shadow-[0_0_10px_rgba(255,215,0,0.8)]' : ''}`}>
-          {checked && <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>}
+        {/* Track */}
+        <div 
+          className={`w-11 h-6 rounded-full transition-colors duration-200 border ${
+            checked 
+              ? 'bg-[var(--col-critical)]/25 border-[var(--col-critical)]/45' 
+              : 'bg-[var(--surface-inner)] border-[var(--border)]'
+          }`}
+        />
+        {/* Thumb */}
+        <div 
+          className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full transition-transform duration-200 ease-spring shadow-sm flex items-center justify-center ${
+            checked 
+              ? 'translate-x-5 bg-[var(--col-critical)] text-[var(--text-inverse)]' 
+              : 'translate-x-0 bg-[var(--text-tertiary)]'
+          }`}
+        >
+          {checked && (
+            <div className="w-1.5 h-1.5 rounded-full bg-[var(--text-inverse)]" />
+          )}
         </div>
       </div>
     </label>

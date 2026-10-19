@@ -6,6 +6,7 @@ from bson import ObjectId
 from app.config import get_settings
 from app.utils.security import hash_password
 from app.models.user import COLLECTION as USERS_COL
+from app.models.contact import COLLECTION as CONTACTS_COL, create_contact_doc
 
 USERS = [
     {"username": "alice", "priority": 3, "display_name": "Alice Chen"},
@@ -45,6 +46,17 @@ async def seed_users():
         else:
             print(f"User {u['username']} already exists, skipping.")
             
+    # Backfill mutual contacts between all demo users
+    contacts_col = db[CONTACTS_COL]
+    all_demo_users = await collection.find({"username": {"$in": [u["username"] for u in USERS]}}).to_list(100)
+    for u1 in all_demo_users:
+        for u2 in all_demo_users:
+            if u1["_id"] != u2["_id"]:
+                existing_c = await contacts_col.find_one({"user_id": str(u1["_id"]), "contact_id": str(u2["_id"])})
+                if not existing_c:
+                    await contacts_col.insert_one(create_contact_doc(str(u1["_id"]), str(u2["_id"])))
+                    print(f"Linked mutual contacts: {u1['username']} <-> {u2['username']}")
+
     client.close()
 
 if __name__ == "__main__":

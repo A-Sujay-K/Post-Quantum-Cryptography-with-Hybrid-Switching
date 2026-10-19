@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { useWebSocket } from '../hooks/useWebSocket';
 import { useAuth } from '../hooks/useAuth';
-import api from '../services/api';
+import api, { getContacts, addContact, removeContact } from '../services/api';
 import { API_ENDPOINTS, WS_EVENTS } from '../utils/constants';
 
 export const ChatContext = createContext();
@@ -21,13 +21,13 @@ export const ChatProvider = ({ children }) => {
 
   const fetchContacts = useCallback(async () => {
     try {
-      const response = await api.get(API_ENDPOINTS.USERS);
-      if (Array.isArray(response.data)) {
-        setContacts(response.data);
-        const online = new Set(response.data.filter(c => c.is_online).map(c => c.id));
+      const data = await getContacts();
+      if (Array.isArray(data)) {
+        setContacts(data);
+        const online = new Set(data.filter(c => c.is_online).map(c => c.id));
         setOnlineUsers(online);
       } else {
-        console.warn('Expected array of users, received:', typeof response.data);
+        console.warn('Expected array of contacts, received:', typeof data);
         setContacts([]);
       }
     } catch (error) {
@@ -69,6 +69,15 @@ export const ChatProvider = ({ children }) => {
             next.set(peerId, [...chatMsgs, payload]);
           }
           return next;
+        });
+
+        // Ensure contact/thread presence in sidebar
+        setContacts(prev => {
+          const exists = prev.some(c => c.id === peerId);
+          if (!exists) {
+            fetchContacts();
+          }
+          return prev;
         });
         
         if (activeChat?.id !== peerId && payload.sender_id !== user.id) {
@@ -146,6 +155,36 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
+  const handleAddContact = async (target) => {
+    try {
+      const payload = typeof target === 'string' ? { contact_id: target } : target;
+      const added = await addContact(payload);
+      setContacts(prev => {
+        const exists = prev.some(c => c.id === added.id);
+        if (exists) {
+          return prev.map(c => c.id === added.id ? { ...c, is_contact: true } : c);
+        }
+        return [added, ...prev];
+      });
+      setActiveChat(prev => (prev?.id === added.id ? { ...prev, is_contact: true } : prev));
+      return added;
+    } catch (err) {
+      console.error('Failed to add contact', err);
+      throw err;
+    }
+  };
+
+  const handleRemoveContact = async (contactId) => {
+    try {
+      await removeContact(contactId);
+      setContacts(prev => prev.map(c => c.id === contactId ? { ...c, is_contact: false } : c));
+      setActiveChat(prev => (prev?.id === contactId ? { ...prev, is_contact: false } : prev));
+    } catch (err) {
+      console.error('Failed to remove contact', err);
+      throw err;
+    }
+  };
+
   return (
     <ChatContext.Provider value={{
       messages,
@@ -158,6 +197,9 @@ export const ChatProvider = ({ children }) => {
       encryptionStatus,
       wsStatus,
       setActiveChat: handleSetActiveChat,
+      addContact: handleAddContact,
+      removeContact: handleRemoveContact,
+      fetchContacts,
       sendMessage,
       startTyping,
       stopTyping,

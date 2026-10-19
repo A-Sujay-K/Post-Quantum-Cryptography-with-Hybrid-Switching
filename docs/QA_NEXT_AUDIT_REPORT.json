@@ -1,0 +1,90 @@
+[
+  {
+    "route": "Home Page",
+    "theme": "dark",
+    "saturation": "0.4%",
+    "saturationPass": true,
+    "edgeViolations": 0,
+    "edgePass": true,
+    "contrast": "100%",
+    "contrastPass": true,
+    "overall": "PASS"
+  },
+  {
+    "route": "Home Page",
+    "theme": "light",
+    "saturation": "0%",
+    "saturationPass": true,
+    "edgeViolations": 0,
+    "edgePass": true,
+    "contrast": "100%",
+    "contrastPass": true,
+    "overall": "PASS"
+  },
+  {
+    "route": "Register Page (Avatar Picker)",
+    "theme": "dark",
+    "saturation": "1%",
+    "saturationPass": true,
+    "edgeViolations": 0,
+    "edgePass": true,
+    "contrast": "100%",
+    "contrastPass": true,
+    "overall": "PASS"
+  },
+  {
+    "route": "Register Page (Avatar Picker)",
+    "theme": "light",
+    "saturation": "0%",
+    "saturationPass": true,
+    "edgeViolations": 0,
+    "edgePass": true,
+    "contrast": "100%",
+    "contrastPass": true,
+    "overall": "PASS"
+  },
+  {
+    "route": "Chat Application (Manual Contacts & Gating)",
+    "theme": "dark",
+    "saturation": "0.2%",
+    "saturationPass": true,
+    "edgeViolations": 0,
+    "edgePass": true,
+    "contrast": "100%",
+    "contrastPass": true,
+    "overall": "PASS"
+  },
+  {
+    "route": "Chat Application (Manual Contacts & Gating)",
+    "theme": "light",
+    "saturation": "0.5%",
+    "saturationPass": true,
+    "edgeViolations": 0,
+    "edgePass": true,
+    "contrast": "100%",
+    "contrastPass": true,
+    "overall": "PASS"
+  },
+  {
+    "route": "Supervisor Command Center",
+    "theme": "dark",
+    "saturation": "0%",
+    "saturationPass": true,
+    "edgeViolations": 0,
+    "edgePass": true,
+    "contrast": "100%",
+    "contrastPass": true,
+    "overall": "PASS"
+  },
+  {
+    "route": "Supervisor Command Center",
+    "theme": "light",
+    "saturation": "0.2%",
+    "saturationPass": true,
+    "edgeViolations": 0,
+    "edgePass": true,
+    "contrast": "100%",
+    "contrastPass": true,
+    "overall": "PASS"
+  }
+]

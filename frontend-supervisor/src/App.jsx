@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import DashboardShell from './components/layout/DashboardShell';
 import DashboardPage from './pages/DashboardPage';
+import StyleguidePage from './pages/StyleguidePage';
+import BackgroundStack from './theme/BackgroundStack';
 import { TelemetryProvider } from './context/TelemetryContext';
 
 class ErrorBoundary extends Component {
@@ -20,16 +22,20 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-dark-900 text-white p-6">
-          <div className="max-w-md w-full glass-panel border border-red-500/30 rounded-2xl p-6 text-center shadow-xl">
-            <div className="w-12 h-12 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">!</div>
-            <h2 className="text-xl font-semibold mb-2">Telemetry Link Interrupted</h2>
-            <p className="text-sm text-slate-400 mb-6 font-mono">{this.state.error?.message || 'An unexpected rendering error occurred.'}</p>
+        <div className="min-h-screen flex items-center justify-center bg-[var(--surface-bg)] text-[var(--text-primary)] p-6 font-sans">
+          <div className="max-w-md w-full glass-l2 border border-[var(--edge-rest)] rounded-[20px] p-6 text-center shadow-xl backdrop-blur-md">
+            <div className="w-12 h-12 bg-red-500/10 text-danger border border-[var(--edge-rest)] rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-medium">
+              !
+            </div>
+            <h2 className="text-lg font-medium mb-2 text-[var(--text-primary)]">Telemetry Link Interrupted</h2>
+            <p className="text-xs text-[var(--text-secondary)] mb-6 font-normal">
+              {this.state.error?.message || 'An unexpected rendering error occurred.'}
+            </p>
             <button
               onClick={() => {
                 window.location.reload();
               }}
-              className="px-5 py-2.5 rounded-xl bg-pqc/20 border border-pqc text-pqc hover:bg-pqc hover:text-black font-medium transition-all"
+              className="w-full h-11 rounded-[12px] btn-primary font-medium text-xs cursor-pointer"
             >
               Reconnect & Reload Dashboard
             </button>
@@ -42,6 +48,18 @@ class ErrorBoundary extends Component {
 }
 
 function App() {
+  const isStyleguide = typeof window !== 'undefined' && window.location.pathname === '/__styleguide';
+
+  if (isStyleguide) {
+    return (
+      <ErrorBoundary>
+        <BackgroundStack variant="supervisor">
+          <StyleguidePage />
+        </BackgroundStack>
+      </ErrorBoundary>
+    );
+  }
+
   return (
     <ErrorBoundary>
       <TelemetryProvider>

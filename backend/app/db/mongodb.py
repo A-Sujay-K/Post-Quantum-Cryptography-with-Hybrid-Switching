@@ -31,6 +31,7 @@ async def init_mongodb(uri: str, db_name: str):
     # Create indexes
     try:
         await _db["users"].create_index([("username", pymongo.ASCENDING), ("email", pymongo.ASCENDING)], unique=True)
+        await _db["contacts"].create_index([("user_id", pymongo.ASCENDING), ("contact_id", pymongo.ASCENDING)], unique=True)
         await _db["messages"].create_index([("sender_id", pymongo.ASCENDING), ("recipient_id", pymongo.ASCENDING), ("created_at", pymongo.DESCENDING)])
         await _db["qkd_keys"].create_index([("consumed", pymongo.ASCENDING), ("generated_at", pymongo.ASCENDING)])
         await _db["telemetry_events"].create_index([("timestamp", pymongo.DESCENDING)])

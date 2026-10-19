@@ -1,45 +1,151 @@
-import React from 'react';
-import { useChat } from '../../hooks/useChat';
+import React, { useState } from 'react';
 import Avatar from '../common/Avatar';
-import Badge from '../common/Badge';
-import Toggle from '../common/Toggle';
-import { ShieldAlert } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Info, Shield } from 'lucide-react';
+import HarvestLabTooltip from '../chat/HarvestLabTooltip';
+import SessionSealModal from '../chat/SessionSealModal';
 
-const ChatHeader = ({ contact, highSecurityMode, onToggleSecurity }) => {
-  const { onlineUsers, encryptionStatus } = useChat();
-  const isOnline = onlineUsers.has(contact.id);
+/**
+ * ChatHeader — Cleaned frosted header with:
+ * - Contact avatar + name + status
+ * - Segmented Lane Control: Standard (ML-KEM-768) vs Critical (QKD-256 Hybrid)
+ *   Directly switches between lanes upon clicking "Standard" or "Critical".
+ * - Two circular glass icon buttons: Session Seal Details, HNDL Info
+ */
+const ChatHeader = ({
+  contact,
+  contactName,
+  contactStatus,
+  highSecurityMode,
+  onToggleSecurity,
+  onToggleMobileMenu,
+}) => {
+  const [isSealDetailsOpen, setIsSealDetailsOpen] = useState(false);
+  const [isHndlOpen, setIsHndlOpen] = useState(false);
+
+  const displayName = contact?.display_name || contactName || 'Secure Peer';
+  const username = contact?.username || displayName.toLowerCase().replace(/\s+/g, '');
+  const status = contactStatus || (contact?.status ? contact.status : 'Online');
 
   return (
-    <div className="absolute top-0 left-0 right-0 h-[72px] px-4 md:px-6 flex items-center justify-between glass z-10 pl-16 md:pl-6 border-b border-white/5">
-      <div className="flex items-center gap-4">
+    <div className="h-16 px-3 sm:px-6 border-b border-[var(--edge-rest)] flex items-center justify-between shrink-0 select-none relative z-20 gap-2">
+      {/* Contact identity */}
+      <div className="flex items-center gap-2.5 min-w-0 flex-1">
         <Avatar 
-          name={contact.display_name} 
-          color={contact.avatar_color} 
-          isOnline={isOnline} 
+          name={displayName} 
+          color={contact?.avatar_color} 
+          avatarUrl={contact?.avatar_url}
+          size="md" 
+          isOnline={status === 'Online'} 
         />
-        <div>
-          <h2 className="text-white font-medium leading-tight">{contact.display_name}</h2>
-          <div className="flex items-center gap-2 mt-1">
-            <span className={`text-xs ${isOnline ? 'text-accent-emerald' : 'text-white/40'}`}>
-              {isOnline ? 'Online' : 'Offline'}
-            </span>
-            <Badge variant={encryptionStatus.lane} className="scale-90 origin-left" />
+        <div className="min-w-0 flex-1">
+          <h2 className="text-xs sm:text-sm font-medium text-[var(--text-primary)] truncate">
+            {displayName}
+          </h2>
+          <div className="hidden xs:flex items-center gap-1.5 text-[11px] sm:text-xs text-[var(--text-tertiary)] font-sans">
+            <span className="truncate">@{username}</span>
+            <span className="text-[var(--edge-rest)]">·</span>
+            <span className="capitalize">{status}</span>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className={`hidden md:flex items-center gap-2 ${highSecurityMode ? 'text-accent-gold' : 'text-white/40'} transition-colors`}>
-          <ShieldAlert size={16} className={highSecurityMode ? 'animate-pulse' : ''} />
-          <span className="text-xs font-mono font-medium tracking-wide">
-            {highSecurityMode ? 'HIGH SECURITY' : 'STANDARD PQC'}
-          </span>
+      {/* Right controls: Segmented Lane Control + 2 circular glass buttons */}
+      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        {/* Segmented Lane Pill: Standard / Critical */}
+        <div 
+          role="group" 
+          aria-label="Encryption Lane Selector" 
+          className="inline-flex items-center p-0.5 rounded-full bg-[var(--surface-inner)] border border-[var(--edge-rest)] text-xs font-sans select-none"
+        >
+          {/* Standard Lane Button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onToggleSecurity?.(false);
+            }}
+            className={`px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs transition-all duration-150 flex items-center gap-1 sm:gap-1.5 cursor-pointer active:scale-95 ${
+              !highSecurityMode
+                ? 'bg-[var(--glass-l2-bg)] text-[var(--text-primary)] shadow-sm border border-[var(--edge-rest)] font-medium'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-elevated)] border border-transparent opacity-75 hover:opacity-100'
+            }`}
+            title="Switch to Standard Lane (ML-KEM-768 + ML-DSA-65)"
+            aria-pressed={!highSecurityMode}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--col-standard)] shrink-0 pointer-events-none" />
+            <span className="font-medium pointer-events-none">Standard</span>
+          </button>
+
+          {/* Critical Lane Button */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onToggleSecurity?.(true);
+            }}
+            className={`px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs transition-all duration-150 flex items-center gap-1 sm:gap-1.5 cursor-pointer active:scale-95 ${
+              highSecurityMode
+                ? 'bg-[var(--glass-l2-bg)] text-[var(--text-primary)] shadow-sm border border-[var(--col-critical)]/40 font-medium'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-elevated)] border border-transparent opacity-75 hover:opacity-100'
+            }`}
+            title="Switch to Critical Lane (QKD-Sim OTP + ML-KEM-768 Hybrid)"
+            aria-pressed={highSecurityMode}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full bg-[var(--col-critical)] shrink-0 pointer-events-none ${highSecurityMode ? 'animate-pulse' : ''}`} />
+            <span className="font-medium pointer-events-none">Critical</span>
+          </button>
         </div>
-        <Toggle 
-          checked={highSecurityMode} 
-          onChange={onToggleSecurity} 
-        />
+
+        {/* 1. Session Seal Details Icon Button */}
+        <button
+          type="button"
+          onClick={() => setIsSealDetailsOpen(true)}
+          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center border transition-all cursor-pointer ${
+            isSealDetailsOpen
+              ? 'border-[var(--edge-hover)] bg-[var(--surface-elevated)] text-[var(--col-standard)]'
+              : 'border-[var(--edge-rest)] bg-[var(--surface-inner)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--edge-hover)]'
+          }`}
+          title="View Session Cryptographic Seal Details"
+          aria-label="View Session Cryptographic Seal Details"
+        >
+          {highSecurityMode ? (
+            <ShieldAlert size={13} className="text-[var(--col-critical)]" />
+          ) : (
+            <ShieldCheck size={13} className="text-[var(--col-standard)]" />
+          )}
+        </button>
+
+        {/* 2. HNDL Threat Defense Info */}
+        <button
+          type="button"
+          onClick={() => setIsHndlOpen(true)}
+          className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center border transition-all cursor-pointer ${
+            isHndlOpen
+              ? 'border-[var(--edge-hover)] bg-[var(--surface-elevated)] text-[var(--col-standard)]'
+              : 'border-[var(--edge-rest)] bg-[var(--surface-inner)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--edge-hover)]'
+          }`}
+          title="HNDL Quantum Threat Defence Information"
+          aria-label="HNDL Quantum Threat Defence Information"
+        >
+          <Info size={13} />
+        </button>
       </div>
+
+      {/* Session Seal Modal */}
+      <SessionSealModal
+        isOpen={isSealDetailsOpen}
+        onClose={() => setIsSealDetailsOpen(false)}
+        peerName={displayName}
+        highSecurityMode={highSecurityMode}
+      />
+
+      {/* HNDL Educational Modal */}
+      <HarvestLabTooltip
+        isOpen={isHndlOpen}
+        onClose={() => setIsHndlOpen(false)}
+      />
     </div>
   );
 };

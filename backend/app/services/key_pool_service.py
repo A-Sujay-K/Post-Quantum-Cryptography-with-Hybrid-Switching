@@ -54,7 +54,9 @@ async def get_pool_stats(db, redis_client) -> dict:
     """
     Returns comprehensive stats about the key pool.
     """
-    available = await get_available_count(redis_client)
+    settings = get_settings()
+    raw_available = await get_available_count(redis_client)
+    available = min(raw_available, settings.K_MAX)
     total_generated = await db[KEYS_COL].count_documents({})
     consumed = await db[KEYS_COL].count_documents({"consumed": True})
     

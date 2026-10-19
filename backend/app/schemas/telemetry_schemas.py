@@ -6,7 +6,7 @@ class KeyPoolMetric(BaseModel):
     available: int
     consumed: int
     generation_rate: float
-    capacity: Optional[int] = 20
+    capacity: Optional[int] = 25
     availability_ratio: Optional[float] = 1.0
 
 class QueueStatus(BaseModel):

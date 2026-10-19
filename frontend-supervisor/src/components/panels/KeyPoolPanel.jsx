@@ -1,47 +1,82 @@
 import React from 'react';
 import { useDashboardState } from '../../hooks/useDashboardState';
 import KeyPoolGauge from '../charts/KeyPoolGauge';
+import NumeralDisplay from '../common/NumeralDisplay';
 import { Key } from 'lucide-react';
 
+/**
+ * KeyPoolPanel — SUPERVISOR App (Reference B style)
+ * Gauge 1 of Row 1: QKD Entropy Pool with 240° arc gauge and quiet legend.
+ */
 const KeyPoolPanel = () => {
-  const { snapshot, alerts } = useDashboardState();
-  
-  if (!snapshot) return null;
-  const { key_pool } = snapshot;
+  const { isReady, kpi, alerts } = useDashboardState();
+
+  if (!isReady || !kpi) return null;
 
   return (
-    <div className={`glass-panel p-5 flex flex-col h-full relative overflow-hidden ${alerts.keyPoolLow ? 'border-health-warning/50' : ''}`}>
-      {alerts.keyPoolLow && (
-        <div className="absolute top-0 right-0 w-32 h-32 bg-health-warning/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
-      )}
-      
-      <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-widest mb-2 flex items-center gap-2">
-        <Key size={16} className="text-qkd" /> QKD Key Pool
-      </h2>
-      
-      <div className="flex-1 flex flex-col items-center justify-center relative min-h-0">
-        <div className="w-full h-full max-h-[220px]">
-          <KeyPoolGauge 
-            available={key_pool.available} 
-            max={key_pool.capacity || 20} 
-          />
+    <div
+      className={`glass-l1 p-4 sm:p-5 flex flex-col h-full relative overflow-hidden transition-colors border ${
+        alerts.keyPoolEmpty
+          ? 'border-[var(--col-danger)]/50'
+          : alerts.keyPoolLow
+          ? 'border-[var(--col-critical)]/50'
+          : 'border-[var(--edge-rest)]'
+      }`}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between gap-2 mb-1 shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-lg bg-[var(--surface-inner)] border border-[var(--edge-rest)] flex items-center justify-center text-[var(--text-secondary)]">
+            <Key size={13} strokeWidth={1.8} />
+          </div>
+          <h2 className="text-[15px] font-medium text-[var(--text-primary)]">
+            QKD Entropy Pool
+          </h2>
         </div>
       </div>
-      
-      <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-dark-700/50">
-        <div>
-          <div className="text-[10px] text-slate-400 uppercase">Availability a(t)</div>
-          <div className="text-base font-mono text-qkd mt-1">
-            {key_pool.availability_ratio != null ? `${(key_pool.availability_ratio * 100).toFixed(0)}%` : '100%'}
+
+      {/* Legend Bullets (Reference B style) */}
+      <div className="flex items-center gap-3 text-xs text-[var(--text-secondary)] mb-2 shrink-0">
+        <span className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--col-standard)]" />
+          <span>{kpi.keyPoolAvailable?.toLocaleString() ?? 0} Available</span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--text-tertiary)]" />
+          <span>{kpi.genRate ?? 0}/min</span>
+        </span>
+      </div>
+
+      {/* Main 240° Arc Gauge */}
+      <div className="flex-1 flex flex-col items-center justify-center relative min-h-0 py-1">
+        <KeyPoolGauge
+          available={kpi.keyPoolAvailable}
+          capacity={kpi.keyPoolCapacity}
+          isSimulated={true}
+        />
+      </div>
+
+      {/* Bottom Summary Strip */}
+      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-[var(--edge-rest)] shrink-0 text-xs font-sans">
+        <div className="flex flex-col min-w-0">
+          <span className="text-[11px] text-[var(--text-secondary)] truncate">Avail. ratio</span>
+          <div className="mt-0.5">
+            <NumeralDisplay value={kpi.availabilityPercent} unit="%" decimals={0} size="sm" />
           </div>
         </div>
-        <div>
-          <div className="text-[10px] text-slate-400 uppercase">Gen Rate</div>
-          <div className="text-base font-mono text-white mt-1">{key_pool.generation_rate.toFixed(1)} <span className="text-[10px] text-slate-500">/m</span></div>
+
+        <div className="flex flex-col min-w-0">
+          <span className="text-[11px] text-[var(--text-secondary)] truncate">Gen rate</span>
+          <div className="mt-0.5">
+            <NumeralDisplay value={kpi.genRate} unit="/min" decimals={1} size="sm" />
+          </div>
         </div>
-        <div>
-          <div className="text-[10px] text-slate-400 uppercase">Consumed</div>
-          <div className="text-base font-mono text-white mt-1">{key_pool.consumed}</div>
+
+        <div className="flex flex-col min-w-0">
+          <span className="text-[11px] text-[var(--text-secondary)] truncate">Consumed</span>
+          <div className="mt-0.5">
+            <NumeralDisplay value={kpi.keyPoolConsumed} unit="keys" decimals={0} size="sm" />
+          </div>
         </div>
       </div>
     </div>

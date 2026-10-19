@@ -1,51 +1,128 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
       colors: {
-        dark: {
-          900: '#0a0a0f',
-          800: '#0f0f1a',
-          700: '#12121f',
-          600: '#1a1a2e',
+        ember: {
+          DEFAULT: 'var(--col-ember)',
+          dark: '#e8622c',
+          light: '#c2410c',
         },
+        field: {
+          base:    'var(--surface-bg)',
+          mid:     'var(--field-mid)',
+          accent1: 'var(--field-accent1)',
+          accent2: 'var(--field-accent2)',
+        },
+        dark: {
+          900: 'var(--dark-900)',
+          800: 'var(--dark-800)',
+          700: 'var(--dark-700)',
+          600: 'var(--dark-600)',
+        },
+        ink: {
+          900: 'var(--ink-900)',
+          800: 'var(--ink-800)',
+          700: 'var(--ink-700)',
+          600: 'var(--ink-600)',
+          500: 'var(--ink-500)',
+        },
+        bone: {
+          DEFAULT: 'var(--text-primary)',
+          muted:   'var(--text-secondary)',
+          dim:     'var(--text-tertiary)',
+        },
+        standard: {
+          DEFAULT: 'var(--col-standard)',
+          dim:     'rgba(94, 234, 212, 0.15)',
+        },
+        critical: {
+          DEFAULT: 'var(--col-critical)',
+          dim:     'rgba(245, 158, 11, 0.15)',
+        },
+        verified: 'var(--col-verified)',
+        danger:   'var(--col-danger)',
+        queue:    'var(--col-queue)',
         pqc: {
-          DEFAULT: '#0ea5e9',
-          glow: '#00d4ff',
+          DEFAULT: 'var(--col-standard)',
+          glow:    'var(--col-standard)',
+          dim:     'rgba(94, 234, 212, 0.15)',
         },
         qkd: {
-          DEFAULT: '#f59e0b',
-          glow: '#fbbf24',
-        },
-        queue: {
-          DEFAULT: '#7c3aed',
-          glow: '#a855f7',
+          DEFAULT: 'var(--col-critical)',
+          glow:    'var(--col-critical)',
+          dim:     'rgba(245, 158, 11, 0.15)',
         },
         health: {
-          good: '#10b981',
-          warning: '#f97316',
-          critical: '#ef4444',
-          goodGlow: '#00ff88',
-        }
+          good:     'var(--col-verified)',
+          warning:  'var(--col-critical)',
+          critical: 'var(--col-danger)',
+          goodGlow: 'var(--col-verified)',
+        },
       },
+
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        sans:    ['"Geist Variable"', '"Geist"', 'system-ui', 'sans-serif'],
+        display: ['"Geist Variable"', '"Geist"', 'system-ui', 'sans-serif'],
+        mono:    ['"Geist Mono"', 'monospace'],
       },
+
+      fontSize: {
+        'xs':     ['clamp(0.6875rem, 1.2vw, 0.75rem)',   { lineHeight: '1.4' }],
+        'sm':     ['clamp(0.75rem,   1.4vw, 0.875rem)',  { lineHeight: '1.5' }],
+        'base':   ['clamp(0.875rem,  1.6vw, 1rem)',      { lineHeight: '1.6' }],
+        'md':     ['clamp(1rem,      1.8vw, 1.125rem)',  { lineHeight: '1.5' }],
+        'lg':     ['clamp(1.25rem,   2.2vw, 1.5rem)',    { lineHeight: '1.3' }],
+        'xl':     ['clamp(1.75rem,   3vw,   2.25rem)',   { lineHeight: '1.1', fontVariantNumeric: 'tabular-nums' }],
+        '2xl':    ['clamp(2.25rem,   4vw,   3rem)',      { lineHeight: '1',   fontVariantNumeric: 'tabular-nums' }],
+        'metric': ['1.5rem',                             { lineHeight: '1',   fontVariantNumeric: 'tabular-nums' }],
+      },
+
+      spacing: { '18': '4.5rem' },
+      borderRadius: {
+        'panel': '12px',
+        'card':  '10px',
+        'pill':  '999px',
+        'seal':  '4px',
+      },
+
+      transitionDuration: {
+        'instant': '120ms',
+        'fast':    '200ms',
+        'medium':  '320ms',
+        'slow':    '560ms',
+      },
+      transitionTimingFunction: {
+        'spring': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+
       animation: {
+        'enter':      'enter 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'enter-slow': 'enterSlow 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'fade-in':    'fadeIn 200ms ease-out forwards',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'glow-pulse': 'glow 2s ease-in-out infinite alternate',
+        'slide-in':   'enter 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'glow-pulse': 'fadeIn 0.01ms linear forwards',
+        'threat-ping':'fadeIn 0.01ms linear forwards',
       },
       keyframes: {
-        glow: {
-          '0%': { boxShadow: '0 0 5px rgba(0, 212, 255, 0.2)' },
-          '100%': { boxShadow: '0 0 20px rgba(0, 212, 255, 0.6)' },
-        }
-      }
+        enter: {
+          from: { opacity: '0', transform: 'translateY(6px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
+        enterSlow: {
+          from: { opacity: '0', transform: 'translateY(12px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeIn: {
+          from: { opacity: '0' },
+          to:   { opacity: '1' },
+        },
+      },
     },
   },
   plugins: [],

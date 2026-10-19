@@ -12,3 +12,4 @@ aiofiles==24.1.0
 loguru==0.7.3
 slowapi==0.1.9
 cryptography==44.0.0
+Pillow==10.4.0

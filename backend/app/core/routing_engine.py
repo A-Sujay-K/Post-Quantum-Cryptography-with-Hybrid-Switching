@@ -34,13 +34,44 @@ async def process_message(content: str, filename: str | None, file_data: bytes |
         get_available_count
     )
     
+    from app.utils.sensitivity import get_sensitivity_score
+    sensitivity = get_sensitivity_score(filename, content, high_security)
+    
+    k_max = settings.K_MAX if settings.K_MAX > 0 else 25
+    a_t = round(max(0.0, min(1.0, available_keys / k_max)), 4)
+    depletion_factor = round(1.0 - a_t, 4)
+    priority_index = round(sender_priority / 10.0, 4) if sender_priority > 0 else 0.30
+    
+    qtl_details = {
+        "formula_qtl": "QTL(f) = w1 * S + w2 * I",
+        "w1": settings.W1,
+        "S": round(sensitivity, 4),
+        "w2": settings.W2,
+        "I": priority_index,
+        "sender_priority": sender_priority,
+        "qtl": threat_score,
+        "formula_tau": "tau_eff(a) = tau_min + (tau_max - tau_min) * (1 - a(t))",
+        "tau_min": settings.TAU_MIN,
+        "tau_max": settings.TAU_MAX,
+        "tau_span": round(settings.TAU_MAX - settings.TAU_MIN, 4),
+        "k_max": k_max,
+        "available_keys": available_keys,
+        "a_t": a_t,
+        "depletion_factor": depletion_factor,
+        "tau_eff": dynamic_threshold,
+        "s_crit": settings.S_CRIT,
+        "lane": lane
+    }
+    
     metadata = {
         "threat_score": threat_score,
         "lane": lane,
         "available_keys_at_time": available_keys,
         "dynamic_threshold": dynamic_threshold,
         "sender_priority": sender_priority,
-        "high_security_flag": high_security
+        "high_security_flag": high_security,
+        "sensitivity": sensitivity,
+        "qtl_details": qtl_details
     }
     
     # Step 2: Standard Lane processing

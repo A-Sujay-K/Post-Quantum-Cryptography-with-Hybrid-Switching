@@ -32,8 +32,8 @@ def get_sensitivity_score(filename: Optional[str], content: Optional[str] = None
         if any(keyword in content_lower for keyword in sensitive_keywords):
             score = max(score, 0.85)
 
-    # 3. High security mode adds 0.40 boost (or overrides)
+    # 3. High security mode: user explicitly requested Critical QKD protection (S >= S_crit)
     if high_security:
-        score = min(1.0, score + 0.40)
+        score = max(score, 0.95)
 
     return min(1.0, score)

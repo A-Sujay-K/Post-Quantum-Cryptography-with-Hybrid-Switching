@@ -1,26 +1,51 @@
 import React from 'react';
 
-const MetricCard = ({ title, value, icon: Icon, trend, trendUp, colorClass = "text-white" }) => {
+/**
+ * MetricCard — SUPERVISOR App (Reference B style)
+ * Large light-weight numerals, clear visual hierarchy, calm semantic accents.
+ * Zero-blur surface-inner observing the global glass performance budget.
+ * Designed to prevent text clipping across 360px mobile, 768px tablet, and 1280px desktop.
+ */
+const MetricCard = ({
+  title,
+  value,
+  icon: Icon,
+  subtitle,
+  colorClass = 'text-[var(--text-primary)]',
+  accentColor,
+}) => {
   return (
-    <div className="glass-panel-glow p-5 flex flex-col justify-between h-full group relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/5 to-transparent rounded-bl-full -mr-4 -mt-4 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-      
-      <div className="flex items-center gap-3 mb-2">
-        {Icon && <Icon size={18} className="text-slate-400" />}
-        <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">{title}</h3>
-      </div>
-      
-      <div className="flex items-end justify-between mt-auto">
-        <div className={`text-4xl font-mono font-bold ${colorClass}`}>
-          {value}
-        </div>
-        
-        {trend && (
-          <div className={`text-xs flex items-center font-mono ${trendUp ? 'text-health-good' : 'text-health-critical'}`}>
-            {trendUp ? '▲' : '▼'} {trend}
+    <div className="surface-inner p-3 sm:p-4 rounded-xl flex flex-col justify-between h-full transition-colors border border-[var(--surface-inner-border)] hover:border-[var(--border)] bg-[var(--surface-inner)] min-h-[105px]">
+      {/* Top row: Label + Icon */}
+      <div className="flex items-start justify-between gap-1.5 mb-1.5">
+        <span className="text-[10px] sm:text-[11px] font-medium tracking-normal sm:tracking-wider uppercase text-[var(--text-secondary)] leading-tight line-clamp-2 min-h-[1.5rem] flex items-center">
+          {title}
+        </span>
+        {Icon && (
+          <div
+            className="w-4 h-4 sm:w-5 sm:h-5 rounded flex items-center justify-center shrink-0 mt-0.5"
+            style={{ color: accentColor || 'var(--text-secondary)' }}
+          >
+            <Icon size={14} strokeWidth={1.75} />
           </div>
         )}
       </div>
+
+      {/* Hero Numeral: Geist Light, tabular nums */}
+      <div className="my-auto py-0.5">
+        <div
+          className={`font-sans font-light tracking-tight text-2xl sm:text-3xl lg:text-[1.85rem] leading-none tabular-nums truncate ${colorClass}`}
+        >
+          {value}
+        </div>
+      </div>
+
+      {/* Bottom subtitle / context note */}
+      {subtitle && (
+        <div className="mt-1.5 pt-1.5 border-t border-[var(--border)] text-[9px] sm:text-[9.5px] font-mono text-[var(--text-tertiary)] truncate uppercase tracking-wider">
+          {subtitle}
+        </div>
+      )}
     </div>
   );
 };

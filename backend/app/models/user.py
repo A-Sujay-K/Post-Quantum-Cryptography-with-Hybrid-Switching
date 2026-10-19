@@ -12,6 +12,7 @@ class UserDoc(TypedDict):
     hashed_password: str
     display_name: str
     avatar_color: str
+    avatar_url: Optional[str]
     priority: int
     is_online: bool
     last_seen: Optional[datetime]
@@ -19,7 +20,7 @@ class UserDoc(TypedDict):
 
 PALETTE = ["#FF5733", "#33FF57", "#3357FF", "#F333FF", "#33FFF3", "#FFD433", "#FF338A"]
 
-def create_user_doc(username: str, email: str, hashed_password: str, display_name: str, priority: int = 5) -> UserDoc:
+def create_user_doc(username: str, email: str, hashed_password: str, display_name: str, priority: int = 5, avatar_url: Optional[str] = None) -> UserDoc:
     return {
         "_id": str(ObjectId()),
         "username": username,
@@ -27,6 +28,7 @@ def create_user_doc(username: str, email: str, hashed_password: str, display_nam
         "hashed_password": hashed_password,
         "display_name": display_name,
         "avatar_color": random.choice(PALETTE),
+        "avatar_url": avatar_url,
         "priority": priority,
         "is_online": False,
         "last_seen": None,

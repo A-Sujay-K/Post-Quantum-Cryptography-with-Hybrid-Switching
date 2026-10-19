@@ -1,14 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PQC Secure Chat</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#1a1410" />
+    <meta name="color-scheme" content="dark light" />
+    <title>PQC Secure Comm — Chat</title>
+    <!-- Pre-paint theme initializer: prevents flash of wrong theme -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('pqc-theme');
+          var systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          var resolved = stored === 'light' ? 'light' : (stored === 'dark' ? 'dark' : systemTheme);
+          document.documentElement.dataset.theme = resolved;
+          document.documentElement.style.colorScheme = resolved;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', resolved === 'dark' ? '#1a1410' : '#f0e8dc');
+          // Preload active theme background
+          var link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = '/backgrounds/' + resolved + '.jpg';
+          document.head.appendChild(link);
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-[#0f0f1a] text-white antialiased overflow-hidden">
+  <body class="antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

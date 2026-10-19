@@ -30,6 +30,11 @@ except ImportError:
     messages_router = None
 
 try:
+    from app.api.routes_contacts import router as contacts_router
+except ImportError:
+    contacts_router = None
+
+try:
     from app.api.routes_telemetry import router as telemetry_router
 except ImportError:
     telemetry_router = None
@@ -106,6 +111,8 @@ if auth_router:
     app.include_router(auth_router, prefix="/api/v1")
 if messages_router:
     app.include_router(messages_router, prefix="/api/v1")
+if contacts_router:
+    app.include_router(contacts_router, prefix="/api/v1")
 if telemetry_router:
     app.include_router(telemetry_router, prefix="/api/v1")
 if health_router:

@@ -8,12 +8,12 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "change-me-to-a-random-secret-key-in-production"
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRY_MINUTES: int = 60
-    QKD_GENERATION_INTERVAL: int = 10
+    QKD_GENERATION_INTERVAL: int = 12
     THREAT_THRESHOLD: float = 0.8
     W1: float = 0.6
     W2: float = 0.4
     W3: float = 0.0  # Kept for backward compatibility
-    K_MAX: int = 20
+    K_MAX: int = 25
     TAU_MIN: float = 0.4
     TAU_MAX: float = 0.8
     S_CRIT: float = 0.85

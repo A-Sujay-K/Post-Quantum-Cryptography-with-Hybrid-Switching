@@ -22,6 +22,7 @@ class UserResponse(BaseModel):
     email: str
     display_name: str
     avatar_color: str
+    avatar_url: Optional[str] = None
     priority: int
     is_online: bool
     last_seen: Optional[datetime] = None

@@ -1,51 +1,40 @@
 import React from 'react';
-import { RadialBarChart, RadialBar, ResponsiveContainer, PolarAngleAxis } from 'recharts';
+import ArcGauge from './ArcGauge';
 
-const KeyPoolGauge = ({ available, max = 20 }) => {
-  // Determine color based on availability
-  let fillColor = '#10b981'; // health.good
-  if (available <= 5 && available > 0) fillColor = '#f97316'; // health.warning
-  if (available === 0) fillColor = '#ef4444'; // health.critical
+/**
+ * KeyPoolGauge — SUPERVISOR App (Reference B style)
+ * Clean 240-degree thin arc gauge displaying QKD Entropy Pool.
+ */
+const KeyPoolGauge = ({ available = 0, capacity = 25, isSimulated = true }) => {
+  const safeCapacity = Math.max(capacity, available, 1);
+  const ratio = Math.min(Math.max(available / safeCapacity, 0), 1);
+  const fillPercent = Math.round(ratio * 100);
 
-  const data = [
-    {
-      name: 'Available Keys',
-      value: Math.min((available / max) * 100, 100), // Cap at 100%
-      fill: fillColor,
-    }
-  ];
+  let statusText = 'Nominal';
+  let isWarning = false;
+  let isDanger = false;
+
+  if (available <= 5 && available > 0) {
+    statusText = 'Reservoir Low';
+    isWarning = true;
+  } else if (available === 0) {
+    statusText = 'Depleted';
+    isDanger = true;
+  }
 
   return (
-    <div className="w-full h-full relative">
-      <ResponsiveContainer width="100%" height="100%">
-        <RadialBarChart 
-          cx="50%" 
-          cy="50%" 
-          innerRadius="70%" 
-          outerRadius="90%" 
-          barSize={15} 
-          data={data}
-          startAngle={180}
-          endAngle={0}
-        >
-          <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
-          <RadialBar
-            minAngle={15}
-            background={{ fill: '#1a1a2e' }}
-            clockWise
-            dataKey="value"
-            cornerRadius={10}
-            isAnimationActive={true}
-          />
-        </RadialBarChart>
-      </ResponsiveContainer>
-      
-      {/* Center Text */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center -mt-6">
-        <span className="text-4xl font-mono font-bold text-white shadow-glow">{available}</span>
-        <span className="text-xs text-slate-400 uppercase tracking-widest mt-1">Ready</span>
-      </div>
-    </div>
+    <ArcGauge
+      value={fillPercent}
+      max={100}
+      displayValue={available}
+      unit="keys"
+      status={statusText}
+      isWarning={isWarning}
+      isDanger={isDanger}
+      trend={available > 10 ? 'up' : null}
+      decimals={0}
+      className="h-full"
+    />
   );
 };
 

@@ -116,7 +116,7 @@ async def get_snapshot(db, redis_client) -> dict:
         recent_events.append(doc)
         
     avail = key_stats.get("available", 0)
-    k_max = settings.K_MAX if settings.K_MAX > 0 else 20
+    k_max = settings.K_MAX if settings.K_MAX > 0 else 25
     
     return {
         "key_pool": {

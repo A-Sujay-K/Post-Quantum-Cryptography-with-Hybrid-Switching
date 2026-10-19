@@ -54,4 +54,11 @@ test_ws.py
 temp_docker_ws_chat.py
 demo
 pqc-secure-comm-backend/
-pqc-secure-comm.zip
+# Artifacts & Local test outputs
+screenshots/
+capture_*.cjs
+test_*.cjs
+audit_*.cjs
+inspect.cjs
+lint_theme.cjs
+verify_*.cjs

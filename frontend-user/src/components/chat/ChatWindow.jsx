@@ -3,6 +3,7 @@ import { useChat } from '../../hooks/useChat';
 import { useAuth } from '../../hooks/useAuth';
 import MessageBubble from './MessageBubble';
 import TypingIndicator from './TypingIndicator';
+import { Shield } from 'lucide-react';
 
 const ChatWindow = () => {
   const { messages, activeChat, typingUsers, markAsRead, unreadCounts } = useChat();
@@ -22,7 +23,7 @@ const ChatWindow = () => {
   useEffect(() => {
     if (activeChat && unreadCount > 0 && chatMessages.length > 0) {
       const unreadIds = chatMessages
-        .filter(m => m.sender_id === activeChat.id) // Only mark received messages
+        .filter(m => m.sender_id === activeChat.id)
         .slice(-unreadCount)
         .map(m => m.id);
       
@@ -34,40 +35,55 @@ const ChatWindow = () => {
 
   // Group by date logic
   const groupedMessages = chatMessages.reduce((acc, msg) => {
-    const date = new Date(msg.created_at).toLocaleDateString();
+    const date = new Date(msg.created_at).toLocaleDateString([], { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    });
     if (!acc[date]) acc[date] = [];
     acc[date].push(msg);
     return acc;
   }, {});
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-6" ref={scrollRef}>
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4" ref={scrollRef}>
       {chatMessages.length === 0 ? (
-        <div className="h-full flex flex-col items-center justify-center text-white/30 space-y-2">
-          <p className="text-sm">This is the beginning of your encrypted chat.</p>
-          <p className="text-xs font-mono">End-to-End Post-Quantum Secured.</p>
+        <div className="h-full min-h-[240px] flex flex-col items-center justify-center text-center p-6 space-y-2 select-none">
+          <div className="w-10 h-10 rounded-full bg-[var(--surface-inner)] border border-[var(--edge-rest)] flex items-center justify-center mb-1">
+            <Shield size={18} className="text-[var(--col-standard)]" />
+          </div>
+          <p className="text-sm font-medium text-[var(--text-primary)]">This is the beginning of your secure conversation.</p>
+          <p className="text-xs text-[var(--text-secondary)] font-sans max-w-sm">
+            NIST FIPS 203 (ML-KEM-768) + ML-DSA-65 protected. Confidential against future quantum decryption.
+          </p>
         </div>
       ) : (
         Object.entries(groupedMessages).map(([date, msgs]) => (
-          <div key={date} className="space-y-4">
-            <div className="flex justify-center">
-              <span className="px-3 py-1 bg-white/5 rounded-full text-[10px] text-white/50 font-medium tracking-wider uppercase backdrop-blur-sm border border-white/5">
+          <div key={date} className="space-y-3">
+            {/* Plain small centered muted text date separator (no outlined pill) */}
+            <div className="flex justify-center my-3 select-none">
+              <span className="text-xs text-[var(--text-tertiary)] font-sans tracking-normal">
                 {date}
               </span>
             </div>
-            {msgs.map((msg, index) => (
-              <MessageBubble 
-                key={msg.id || index}
-                message={msg}
-                isOwn={msg.sender_id === user.id}
-              />
-            ))}
+
+            {msgs.map((msg, index) => {
+              const isLastInGroup = index === msgs.length - 1 || msgs[index + 1]?.sender_id !== msg.sender_id;
+              return (
+                <MessageBubble 
+                  key={msg.id || index}
+                  message={msg}
+                  isOwn={msg.sender_id === user?.id}
+                  hasTail={isLastInGroup}
+                />
+              );
+            })}
           </div>
         ))
       )}
       
       {isTyping && (
-        <div className="flex justify-start">
+        <div className="flex justify-start pl-2">
           <TypingIndicator name={activeChat.display_name} />
         </div>
       )}

@@ -23,4 +23,38 @@ api.interceptors.response.use(
   }
 );
 
+export const uploadAvatar = async (fileOrBlob) => {
+  const formData = new FormData();
+  formData.append('file', fileOrBlob, 'avatar.webp');
+  const res = await api.post('/auth/me/avatar', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+  return res.data;
+};
+
+export const deleteAvatar = async () => {
+  const res = await api.delete('/auth/me/avatar');
+  return res.data;
+};
+
+export const getContacts = async () => {
+  const res = await api.get('/contacts');
+  return res.data;
+};
+
+export const addContact = async (payload) => {
+  const res = await api.post('/contacts', payload);
+  return res.data;
+};
+
+export const removeContact = async (contactId) => {
+  const res = await api.delete(`/contacts/${contactId}`);
+  return res.data;
+};
+
+export const searchUsers = async (query) => {
+  const res = await api.get('/users/search', { params: { q: query } });
+  return res.data;
+};
+
 export default api;

@@ -169,10 +169,22 @@ async def websocket_chat_endpoint(websocket: WebSocket, token: str):
                             "aes_mode": "AES-256-GCM",
                             # Full lifecycle (timings, keys, sizes, verification)
                             "lifecycle": lifecycle,
+                            # QTL formulation and dynamic threshold parameters
+                            "qtl_details": routing_result.get("metadata", {}).get("qtl_details"),
+                            "available_keys_at_time": routing_result.get("metadata", {}).get("available_keys_at_time"),
+                            "dynamic_threshold": routing_result.get("metadata", {}).get("dynamic_threshold"),
+                            "sender_priority": sender_priority,
+                            "sensitivity": routing_result.get("metadata", {}).get("sensitivity"),
                         })
                         
+                        # Check contact status for recipient
+                        is_contact_for_recipient = await db["contacts"].find_one({
+                            "user_id": recipient_id,
+                            "contact_id": user_id
+                        }) is not None
+
                         # Deliver to recipient
-                        outgoing = {
+                        recipient_payload = {
                             "type": "chat_message",
                             "payload": {
                                 "id": msg_id,
@@ -185,13 +197,31 @@ async def websocket_chat_endpoint(websocket: WebSocket, token: str):
                                 "encryption_lane": routing_result["lane"],
                                 "threat_score": routing_result["threat_score"],
                                 "is_read": False,
+                                "is_contact": is_contact_for_recipient,
                                 "created_at": message_doc["created_at"].isoformat(),
                             }
                         }
-                        await manager.send_to_user(recipient_id, outgoing)
+                        await manager.send_to_user(recipient_id, recipient_payload)
                         
                         # Deliver to sender so they see it in their UI
-                        await manager.send_to_user(user_id, outgoing)
+                        sender_payload = {
+                            "type": "chat_message",
+                            "payload": {
+                                "id": msg_id,
+                                "sender_id": user_id,
+                                "recipient_id": recipient_id,
+                                "content": content,
+                                "file_name": filename,
+                                "file_url": file_url,
+                                "file_size": file_size,
+                                "encryption_lane": routing_result["lane"],
+                                "threat_score": routing_result["threat_score"],
+                                "is_read": False,
+                                "is_contact": True,
+                                "created_at": message_doc["created_at"].isoformat(),
+                            }
+                        }
+                        await manager.send_to_user(user_id, sender_payload)
                         
                         # Also send delivery confirmation to sender
                         await manager.send_to_user(user_id, {

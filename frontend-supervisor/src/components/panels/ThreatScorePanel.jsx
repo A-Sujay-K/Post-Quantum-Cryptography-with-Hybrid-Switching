@@ -1,35 +1,76 @@
 import React from 'react';
 import { useDashboardState } from '../../hooks/useDashboardState';
 import ThreatHeatmap from '../charts/ThreatHeatmap';
+import NumeralDisplay from '../common/NumeralDisplay';
 import { ShieldAlert } from 'lucide-react';
 
+/**
+ * ThreatScorePanel — SUPERVISOR App (Reference B style)
+ * Line Chart 1 of Row 2: Threat Score Timeline smooth spline.
+ */
 const ThreatScorePanel = () => {
-  const { snapshot, chartData, alerts } = useDashboardState();
-  
-  if (!snapshot) return null;
-  const { routing } = snapshot;
+  const { isReady, kpi, chartData, alerts } = useDashboardState();
+
+  if (!isReady || !kpi) return null;
+
+  const avgScore = parseFloat(kpi.avgThreatScore) || 0.0;
+  const isHighThreat = avgScore >= 0.70;
 
   return (
-    <div className={`glass-panel p-5 flex flex-col h-full relative overflow-hidden ${alerts.highThreat ? 'border-health-warning/50' : ''}`}>
-      {alerts.highThreat && (
-        <div className="absolute top-0 right-0 w-32 h-32 bg-health-warning/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
-      )}
-
-      <div className="flex justify-between items-start mb-4">
-        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-widest flex items-center gap-2">
-          <ShieldAlert size={16} className="text-health-warning" /> Threat Analysis
-        </h2>
-        
-        <div className="text-right">
-          <div className="text-xs text-slate-400 uppercase">Avg Q_TL</div>
-          <div className={`text-2xl font-mono font-bold ${routing.avg_threat_score > 0.7 ? 'text-health-critical' : 'text-slate-300'}`}>
-            {routing.avg_threat_score?.toFixed(2) || '0.00'}
+    <div
+      className={`glass-l1 p-4 sm:p-5 flex flex-col h-full relative overflow-hidden transition-colors border ${
+        alerts.highThreat ? 'border-[var(--col-danger)]/50' : 'border-[var(--edge-rest)]'
+      }`}
+    >
+      {/* Header */}
+      <div className="flex justify-between items-start mb-2 shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-lg bg-[var(--surface-inner)] border border-[var(--edge-rest)] flex items-center justify-center text-[var(--text-secondary)]">
+            <ShieldAlert size={13} strokeWidth={1.8} />
+          </div>
+          <div>
+            <h2 className="text-[15px] font-medium text-[var(--text-primary)]">
+              Threat Score Timeline
+            </h2>
+            <p className="text-[11px] text-[var(--text-secondary)] font-sans">
+              Real-time heuristic risk scoring (Q_TL)
+            </p>
           </div>
         </div>
       </div>
-      
-      <div className="flex-1 min-h-0 -ml-2 -mb-2">
-         <ThreatHeatmap data={chartData?.threatScatter || []} threshold={0.7} />
+
+      {/* Numeral Display (Reference B: centered/top hero figure with trend) */}
+      <div className="flex items-baseline justify-between mb-1 shrink-0">
+        <div className="flex items-baseline gap-2">
+          <NumeralDisplay 
+            value={avgScore} 
+            unit="" 
+            trend={isHighThreat ? 'up' : null} 
+            decimals={2} 
+            size="lg" 
+          />
+          <span className="text-xs text-[var(--text-secondary)] font-sans">Avg Threat Score</span>
+        </div>
+      </div>
+
+      {/* Smooth Spline Timeline Chart */}
+      <div className="flex-1 min-h-[160px] -ml-2 -mb-1">
+        <ThreatHeatmap data={chartData?.threatScatter || []} threshold={0.70} />
+      </div>
+
+      {/* Footer Policy Strip */}
+      <div className="mt-2 pt-2.5 border-t border-[var(--edge-rest)] flex items-center justify-between text-xs text-[var(--text-tertiary)] shrink-0 font-sans">
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--col-standard)]" />
+            <span>&lt; 0.70 Standard</span>
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--col-critical)]" />
+            <span>≥ 0.70 Critical</span>
+          </span>
+        </div>
+        <span className="hidden sm:inline text-[var(--text-tertiary)] text-[11px]">Threshold locked at 0.70</span>
       </div>
     </div>
   );

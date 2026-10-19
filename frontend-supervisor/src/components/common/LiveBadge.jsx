@@ -1,12 +1,23 @@
 import React from 'react';
 
+/**
+ * LiveBadge — SUPERVISOR App
+ * Clean semantic status indicator: verified green for live, danger red for disconnected.
+ * Follows DESIGN_SYSTEM.md: zero neon box-shadows, dual-theme semantic CSS tokens.
+ */
 const LiveBadge = ({ isLive }) => {
   return (
-    <div className={`flex items-center gap-2 px-3 py-1 rounded border ${isLive ? 'bg-health-good/10 border-health-good/30' : 'bg-health-critical/10 border-health-critical/30'}`}>
-      <div className={`w-2 h-2 rounded-full ${isLive ? 'bg-health-good shadow-[0_0_8px_rgba(0,255,136,0.8)] animate-pulse' : 'bg-health-critical'}`}></div>
-      <span className={`text-xs font-bold tracking-widest ${isLive ? 'text-health-goodGlow' : 'text-health-critical'}`}>
-        {isLive ? 'LIVE' : 'OFFLINE'}
-      </span>
+    <div
+      className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[var(--surface-inner)] border border-[var(--edge-rest)] text-[11px] font-sans font-medium tracking-normal text-[var(--text-secondary)] transition-colors"
+      role="status"
+      aria-label={isLive ? 'System status: live telemetry connected' : 'System status: telemetry offline'}
+    >
+      <span
+        className={`w-1.5 h-1.5 rounded-full ${
+          isLive ? 'bg-[var(--col-verified)] animate-pulse' : 'bg-[var(--col-danger)]'
+        }`}
+      />
+      <span className="text-[var(--text-primary)]">{isLive ? 'Live' : 'Offline'}</span>
     </div>
   );
 };
