@@ -2,19 +2,23 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const LUMINANCE_RAMP = ' .,:-=+*#%@';
 const NOISE_CHARS = '▒░█▓%#*+=-:·';
+const DETECTION_GLYPHS = ['.', '+', '·', ':'];
 
 /**
- * QubitHero
- * Real-time 2D Canvas ASCII Bloch Sphere renderer.
- * Features:
- * - Analytic 3D spherical shading with top-left illumination
- * - Equator and prime meridian rings
- * - Poles labelled |0> (north) and |1> (south)
- * - State vector |psi> with arrowhead glyph
- * - Live telemetry readout (theta, phi, P(0), P(1))
- * - Cursor tracking with spring damping
- * - Interactive measurement collapse (Click / Tap / Key 'M')
- * - Staggered slice-collapse on scroll exit
+ * QubitHero — "SUPERPOSITION CLOUD"
+ * Awwwards-level creative ASCII quantum volume renderer.
+ *
+ * Concepts:
+ * - Two quantum-orbital lobes: upper |0>, lower |1>, state |psi> = alpha|0> + beta|1>
+ * - Density ratio P(0):P(1) where P(0) = cos^2(theta/2), P(1) = sin^2(theta/2)
+ * - Thin torus waist ring of dense glyphs where lobes meet
+ * - Faint standing-wave phase pattern with radial shimmer
+ * - Stochastic scatter of transient detection points (double-slit accumulation)
+ * - Pointer move tilts the cloud with spring damping (face tracking feel)
+ * - Click, Tap, or Key 'M' triggers wave-function measurement collapse into ONE lobe
+ *   with an expanding ASCII noise shockwave and flash detection point, re-expanding after 1.2s
+ * - Slice-collapse scroll transitions: rows displace horizontally with alternating stagger
+ * - 60fps budget optimization, DPR-aware, reduced motion fallback, full ARIA compliance
  */
 export default function QubitHero({ scrollProgress = 0, className = '' }) {
   const canvasRef = useRef(null);
@@ -22,29 +26,37 @@ export default function QubitHero({ scrollProgress = 0, className = '' }) {
   const animFrameRef = useRef(null);
   const isVisibleRef = useRef(true);
 
-  // Quantum state
+  // Live telemetry readout state
   const [telemetry, setTelemetry] = useState({
-    theta: 0.96,
-    phi: 1.57,
-    p0: 0.79,
-    p1: 0.21,
+    theta: 1.00,
+    phi: 4.94,
+    p0: 0.77,
+    p1: 0.23,
+    lastMeasure: null,
     status: 'SUPERPOSITION'
   });
 
+  // State ref for high-frequency 60fps physics
   const stateRef = useRef({
-    theta: 0.96,
-    phi: 1.57,
-    p0: 0.79,
-    p1: 0.21,
-    targetTheta: 0.96,
-    targetPhi: 1.57,
+    theta: 1.00,
+    phi: 4.94,
+    p0: 0.77,
+    p1: 0.23,
+    targetTheta: 1.00,
+    targetPhi: 4.94,
     tiltX: 0,
     tiltY: 0,
     targetTiltX: 0,
     targetTiltY: 0,
+    // Collapse physics
     isCollapsed: false,
     collapsedBit: null,
-    collapseBurst: 0, // 0 to 1 noise intensity
+    collapseTimer: 0,
+    shockRadius: 0,
+    shockActive: false,
+    detectionPoint: null,
+    // Transient particles
+    detections: [], // { x, y, glyph, age, maxAge }
     time: 0,
     lastTime: performance.now(),
   });
@@ -53,126 +65,103 @@ export default function QubitHero({ scrollProgress = 0, className = '' }) {
   const prefersReducedMotion = typeof window !== 'undefined'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Measurement collapse handler
+  // Wave-function measurement collapse
   const triggerCollapse = useCallback(() => {
     const s = stateRef.current;
     if (s.isCollapsed) return;
 
+    // Quantum coin-flip weighted by P(0)
+    const outcome = Math.random() < s.p0 ? 0 : 1;
     s.isCollapsed = true;
-    s.collapseBurst = 1.0;
-
-    // Quantum probability collapse
-    const r = Math.random();
-    const bit = r < s.p0 ? 0 : 1;
-    s.collapsedBit = bit;
-    s.targetTheta = bit === 0 ? 0.05 : Math.PI - 0.05;
+    s.collapsedBit = outcome;
+    s.collapseTimer = 1.2; // 1.2s recovery duration
+    s.shockRadius = 0;
+    s.shockActive = true;
+    s.detectionPoint = {
+      x: 60 + (Math.random() - 0.5) * 8,
+      y: outcome === 0 ? 18 : 42,
+      brightness: 1.0
+    };
 
     setTelemetry((prev) => ({
       ...prev,
-      p0: bit === 0 ? 1.0 : 0.0,
-      p1: bit === 1 ? 1.0 : 0.0,
-      status: `COLLAPSED: |${bit}>`
+      lastMeasure: outcome,
+      status: `COLLAPSED |${outcome}⟩`
     }));
-
-    // Auto-return to superposition after ~1.2s per specification
-    setTimeout(() => {
-      s.isCollapsed = false;
-      s.collapseBurst = 0.5;
-      s.targetTheta = 0.96;
-      s.targetPhi = 1.57;
-
-      setTimeout(() => {
-        s.collapseBurst = 0;
-        setTelemetry((prev) => ({
-          ...prev,
-          status: 'SUPERPOSITION'
-        }));
-      }, 300);
-    }, 1200);
   }, []);
 
-  // Keyboard shortcut listener ('M' for measure)
+  // Keyboard shortcut: Key 'M' triggers measurement collapse
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
       if (e.key === 'm' || e.key === 'M') {
-        e.preventDefault();
         triggerCollapse();
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [triggerCollapse]);
 
-  // Mouse / Pointer tracking
+  // Pointer tracking with spring physics
   const handlePointerMove = (e) => {
-    if (prefersReducedMotion) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1; // -1 to 1
-    const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1; // -1 to 1
+    if (prefersReducedMotion || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
 
     const s = stateRef.current;
-    s.targetTiltX = nx * 0.45;
-    s.targetTiltY = ny * 0.35;
-
-    if (!s.isCollapsed) {
-      s.targetTheta = Math.max(0.2, Math.min(Math.PI - 0.2, 0.96 + ny * 0.6));
-      s.targetPhi = 1.57 + nx * 1.2;
-    }
+    s.targetTiltX = ny * 0.45;
+    s.targetTiltY = nx * 0.55;
+    // Shift theta and phi toward cursor
+    s.targetTheta = Math.max(0.25, Math.min(Math.PI - 0.25, 1.0 + ny * 0.7));
+    s.targetPhi = (4.94 + nx * 1.5 + Math.PI * 2) % (Math.PI * 2);
   };
 
   const handlePointerLeave = () => {
     const s = stateRef.current;
     s.targetTiltX = 0;
     s.targetTiltY = 0;
-    if (!s.isCollapsed) {
-      s.targetTheta = 0.96;
-      s.targetPhi = 1.57;
-    }
+    s.targetTheta = 1.00;
+    s.targetPhi = 4.94;
   };
 
-  // Visibility detection (pause when offscreen or hidden)
+  // Visibility and offscreen observer
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      isVisibleRef.current = !document.hidden;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     const observer = new IntersectionObserver(
       (entries) => {
-        isVisibleRef.current = entries[0].isIntersecting;
+        isVisibleRef.current = entries[0].isIntersecting && !document.hidden;
       },
       { threshold: 0.05 }
     );
 
     if (containerRef.current) observer.observe(containerRef.current);
 
-    const handleVisibility = () => {
-      isVisibleRef.current = document.visibilityState === 'visible';
-    };
-    document.addEventListener('visibilitychange', handleVisibility);
-
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       observer.disconnect();
-      document.removeEventListener('visibilitychange', handleVisibility);
     };
   }, []);
 
-  // Main Canvas Rendering Loop
+  // Main 60fps render loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d', { alpha: true });
 
-    // Grid configuration: ~110 columns x ~55 rows
-    const COLS = 104;
-    const ROWS = 52;
-    const CELL_W = 6;
-    const CELL_H = 10;
+    const COLS = 120;
+    const ROWS = 60;
+    const CELL_W = 4;
+    const CELL_H = 7;
 
-    canvas.width = COLS * CELL_W;
-    canvas.height = ROWS * CELL_H;
-
-    let lastTelemetryUpdate = 0;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = COLS * CELL_W * dpr;
+    canvas.height = ROWS * CELL_H * dpr;
+    ctx.scale(dpr, dpr);
 
     const render = (now) => {
       if (!isVisibleRef.current) {
@@ -181,207 +170,210 @@ export default function QubitHero({ scrollProgress = 0, className = '' }) {
       }
 
       const s = stateRef.current;
-      const dt = Math.min(0.05, (now - s.lastTime) / 1000);
+      const dt = Math.min(0.04, (now - s.lastTime) / 1000);
       s.lastTime = now;
       s.time += dt;
 
       // Spring damping physics
-      s.tiltX += (s.targetTiltX - s.tiltX) * 0.12;
-      s.tiltY += (s.targetTiltY - s.tiltY) * 0.12;
+      s.tiltX += (s.targetTiltX - s.tiltX) * 0.08;
+      s.tiltY += (s.targetTiltY - s.tiltY) * 0.08;
+      s.theta += (s.targetTheta - s.theta) * 0.08;
+      s.phi += (s.targetPhi - s.phi) * 0.08;
 
-      if (!s.isCollapsed) {
-        // Precession oscillation
-        const idlePhi = s.targetPhi + s.time * 0.35;
-        const idleTheta = s.targetTheta + Math.sin(s.time * 0.7) * 0.08;
-        s.phi += (idlePhi - s.phi) * 0.1;
-        s.theta += (idleTheta - s.theta) * 0.1;
-      } else {
-        s.theta += (s.targetTheta - s.theta) * 0.2;
-        s.phi += (s.targetPhi - s.phi) * 0.2;
+      s.p0 = Math.cos(s.theta / 2) ** 2;
+      s.p1 = Math.sin(s.theta / 2) ** 2;
+
+      // Update collapse recovery timer
+      if (s.isCollapsed) {
+        s.collapseTimer -= dt;
+        if (s.shockActive) {
+          s.shockRadius += dt * 55; // expanding shockwave
+          if (s.shockRadius > 70) s.shockActive = false;
+        }
+        if (s.collapseTimer <= 0) {
+          s.isCollapsed = false;
+          s.collapsedBit = null;
+          s.shockActive = false;
+          s.detectionPoint = null;
+          setTelemetry((prev) => ({
+            ...prev,
+            status: 'SUPERPOSITION'
+          }));
+        }
       }
 
-      // Compute quantum probabilities
-      const p0 = Math.cos(s.theta / 2) ** 2;
-      const p1 = Math.sin(s.theta / 2) ** 2;
-      s.p0 = p0;
-      s.p1 = p1;
-
-      // Decay noise burst
-      if (s.collapseBurst > 0) {
-        s.collapseBurst = Math.max(0, s.collapseBurst - dt * 2.2);
+      // Update detections particle buffer
+      if (Math.random() < 0.35 && s.detections.length < 40) {
+        // Sample random point around lobes
+        const isUpper = Math.random() < s.p0;
+        const cy = isUpper ? 20 : 40;
+        const rx = (Math.random() - 0.5) * 28;
+        const ry = (Math.random() - 0.5) * 16;
+        s.detections.push({
+          c: Math.floor(COLS / 2 + rx),
+          r: Math.floor(cy + ry),
+          glyph: DETECTION_GLYPHS[Math.floor(Math.random() * DETECTION_GLYPHS.length)],
+          age: 0,
+          maxAge: 1.2 + Math.random() * 1.0
+        });
       }
 
-      // Throttle telemetry state updates to ~15fps for UI smooth performance
-      if (now - lastTelemetryUpdate > 65) {
-        lastTelemetryUpdate = now;
+      for (let i = s.detections.length - 1; i >= 0; i--) {
+        const d = s.detections[i];
+        d.age += dt;
+        if (d.age >= d.maxAge) {
+          s.detections.splice(i, 1);
+        }
+      }
+
+      // Sync telemetry throttle
+      if (Math.floor(s.time * 15) % 3 === 0) {
         setTelemetry((prev) => ({
           ...prev,
           theta: s.theta,
           phi: s.phi,
-          p0: s.isCollapsed ? (s.collapsedBit === 0 ? 1 : 0) : p0,
-          p1: s.isCollapsed ? (s.collapsedBit === 1 ? 1 : 0) : p1
+          p0: s.p0,
+          p1: s.p1
         }));
       }
 
-      // Check theme
-      const isDark = document.documentElement.dataset.theme !== 'light';
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Colors
-      const colPrimary = isDark ? '#f0e8dc' : '#2a2018';
-      const colSecondary = isDark ? '#8c8276' : '#8c8074';
-      const colTeal = isDark ? '#5eead4' : '#0d9488';
-      const colAmber = isDark ? '#f59e0b' : '#d97706';
-
-      ctx.font = '300 9px "Geist Mono", monospace';
+      ctx.clearRect(0, 0, COLS * CELL_W, ROWS * CELL_H);
+      ctx.font = `${CELL_H}px "Geist Mono", monospace`;
       ctx.textBaseline = 'top';
 
-      const cx = Math.floor(COLS / 2);
-      const cy = Math.floor(ROWS / 2);
-      const radiusX = 28;
-      const radiusY = 20;
+      const isDark = document.documentElement.dataset.theme !== 'light';
+      const charColor = isDark ? '#f0e8dc' : '#2a2018';
+      const dimColor = isDark ? 'rgba(240, 232, 220, 0.22)' : 'rgba(42, 32, 24, 0.22)';
+      const accentTeal = isDark ? '#5eead4' : '#0d9488';
+      const accentAmber = isDark ? '#f59e0b' : '#b45309';
 
-      // Light vector from top-left front: [-0.5, -0.6, 0.62]
-      const lx = -0.52;
-      const ly = -0.58;
-      const lz = 0.62;
+      const cx = COLS / 2;
+      const cy = ROWS / 2;
+      const rotY = s.time * 0.32 + s.tiltY;
+      const rotX = s.tiltX;
 
-      // Vector |psi> position on unit sphere:
-      // Physics: x = sin(theta)*cos(phi), y = cos(theta), z = sin(theta)*sin(phi)
-      const vx = Math.sin(s.theta) * Math.cos(s.phi);
-      const vy = -Math.cos(s.theta); // -y is up in canvas
-      const vz = Math.sin(s.theta) * Math.sin(s.phi);
+      const cosY = Math.cos(rotY);
+      const sinY = Math.sin(rotY);
+      const cosX = Math.cos(rotX);
+      const sinX = Math.sin(rotX);
 
-      // Sphere rotation matrix (idle + tilt)
-      const rotY = s.tiltX + (s.time * 0.15);
-      const rotX = -s.tiltY;
-      const cosRY = Math.cos(rotY);
-      const sinRY = Math.sin(rotY);
-      const cosRX = Math.cos(rotX);
-      const sinRX = Math.sin(rotX);
+      // Model parameters
+      const breathing = Math.sin(s.time * 1.5) * 1.2;
+      const y0 = 12 + breathing;
+      const sigSq = 120;
+      const rWaist = 14;
+      const sigWSq = 14;
 
-      // Slice-collapse parameter (when scrolling away)
-      const collapse = Math.min(1, Math.max(0, scrollProgress));
+      // Slice-collapse parameters on scroll
+      const isSlicing = scrollProgress > 0.005;
 
-      // Generate cell grid
+      // Calculate effective lobe weights based on collapse state
+      let activeP0 = s.p0;
+      let activeP1 = s.p1;
+      if (s.isCollapsed) {
+        if (s.collapsedBit === 0) {
+          activeP0 = 1.0;
+          activeP1 = 0.0;
+        } else {
+          activeP0 = 0.0;
+          activeP1 = 1.0;
+        }
+      }
+
       for (let r = 0; r < ROWS; r++) {
-        // Staggered slice-collapse horizontal shift for animation 6
+        // Staggered slice-collapse row displacement
         let xOffset = 0;
-        let rowOpacity = 1;
-
-        if (collapse > 0) {
-          const rowStagger = Math.sin(r * 0.35 + s.time) * (r % 2 === 0 ? 1 : -1);
-          xOffset = rowStagger * collapse * 180;
-          rowOpacity = Math.max(0, 1 - collapse * 1.5);
+        if (isSlicing) {
+          const sliceDir = r % 2 === 0 ? 1 : -1;
+          const stagger = ((r % 9) / 9) * 0.45;
+          const effProgress = Math.max(0, scrollProgress - stagger);
+          xOffset = sliceDir * effProgress * 320;
         }
 
-        if (rowOpacity <= 0) continue;
+        const yNorm = (r - cy);
+        if (Math.abs(yNorm) > 28) continue;
 
         for (let c = 0; c < COLS; c++) {
-          const dx = (c - cx) / radiusX;
-          const dy = (r - cy) / radiusY;
-          const distSq = dx * dx + dy * dy;
+          const xNorm = (c - cx) * 0.6;
+          const distSq2D = xNorm * xNorm + yNorm * yNorm;
+          if (distSq2D > 750) continue;
 
-          let char = ' ';
-          let charColor = colSecondary;
-
-          // 1. Noise burst override
-          if (s.collapseBurst > 0 && Math.random() < s.collapseBurst * 0.75) {
-            char = NOISE_CHARS[Math.floor(Math.random() * NOISE_CHARS.length)];
-            charColor = Math.random() > 0.5 ? colAmber : colTeal;
-            ctx.fillStyle = charColor;
-            ctx.fillText(char, c * CELL_W + xOffset, r * CELL_H);
-            continue;
+          // Outward shockwave ring override
+          if (s.shockActive) {
+            const distFromCenter = Math.sqrt(distSq2D);
+            if (Math.abs(distFromCenter - s.shockRadius) < 2.5) {
+              const noiseGlyph = NOISE_CHARS[Math.floor(Math.random() * NOISE_CHARS.length)];
+              ctx.fillStyle = s.collapsedBit === 0 ? accentTeal : accentAmber;
+              ctx.fillText(noiseGlyph, c * CELL_W + xOffset, r * CELL_H);
+              continue;
+            }
           }
 
-          // 2. Axis North |0> and South |1> labels
-          if (c === cx && r === cy - radiusY - 2) {
-            ctx.fillStyle = colTeal;
-            ctx.fillText('|0>', (c - 1) * CELL_W + xOffset, r * CELL_H);
-            continue;
+          // 10-step ray accumulation
+          let density = 0;
+          let lightFactor = 0;
+
+          for (let z = -18; z <= 18; z += 4) {
+            // Un-rotate coordinates back into model space
+            const xr = xNorm * cosY - z * sinY;
+            const zr = xNorm * sinY + z * cosY;
+            const yr = yNorm * cosX - zr * sinX;
+            const zrr = yNorm * sinX + zr * cosX;
+
+            // Upper lobe |0>
+            const d0 = activeP0 * Math.exp(-(xr * xr + (yr - y0) * (yr - y0) * 0.8 + zrr * zrr) / sigSq);
+            // Lower lobe |1>
+            const d1 = activeP1 * Math.exp(-(xr * xr + (yr + y0) * (yr + y0) * 0.8 + zrr * zrr) / sigSq);
+            // Waist torus ring
+            const rXZ = Math.sqrt(xr * xr + zrr * zrr);
+            const dW = 0.35 * Math.exp(-(yr * yr + (rXZ - rWaist) * (rXZ - rWaist)) / sigWSq);
+
+            const stepD = d0 + d1 + dW;
+            if (stepD > 0.015) {
+              density += stepD;
+              // Directional lighting from top-left: light vector (-0.577, -0.577, 0.577)
+              lightFactor += stepD * (1.0 + (xr * -0.45 + yr * -0.55 + zrr * 0.35) / 20);
+            }
           }
-          if (c === cx && r === cy + radiusY + 1) {
-            ctx.fillStyle = colAmber;
-            ctx.fillText('|1>', (c - 1) * CELL_W + xOffset, r * CELL_H);
-            continue;
-          }
 
-          if (distSq <= 1.0) {
-            // Front hemisphere 3D point
-            const dz = Math.sqrt(Math.max(0, 1.0 - distSq));
+          if (density > 0.05) {
+            // Standing wave radial shimmer
+            const r3D = Math.sqrt(distSq2D);
+            const shimmer = 1.0 + 0.16 * Math.sin(0.4 * r3D - 2.2 * s.time + s.phi);
+            const totalIntensity = density * shimmer * (lightFactor / (density || 1));
 
-            // Apply 3D rotation
-            // 1. Rotate around Y
-            const x1 = dx * cosRY + dz * sinRY;
-            const z1 = -dx * sinRY + dz * cosRY;
-            // 2. Rotate around X
-            const y2 = dy * cosRX - z1 * sinRX;
-            const z2 = dy * sinRX + z1 * cosRX;
-
-            // Surface normal
-            const nx = x1;
-            const ny = y2;
-            const nz = z2;
-
-            // Diffuse Lambertian luminance
-            const diffuse = Math.max(0, nx * lx + ny * ly + nz * lz);
-            const rampIndex = Math.min(
+            const charIdx = Math.min(
               LUMINANCE_RAMP.length - 1,
-              Math.max(0, Math.floor(diffuse * (LUMINANCE_RAMP.length - 1)))
+              Math.max(0, Math.floor(totalIntensity * 0.65 * (LUMINANCE_RAMP.length - 1)))
             );
-            char = LUMINANCE_RAMP[rampIndex];
+            const char = LUMINANCE_RAMP[charIdx];
 
-            // 3. Equator Ring (y2 ~ 0)
-            if (Math.abs(y2) < 0.08) {
-              char = '=';
-              charColor = colPrimary;
-            }
-
-            // 4. Prime Meridian Ring (x1 ~ 0)
-            if (Math.abs(x1) < 0.06) {
-              char = ':';
-              charColor = colSecondary;
-            }
-
-            // 5. State vector line rendering from center (0,0) to tip (vx, vy)
-            // Interpolate ray from origin (0,0) to rotated vector
-            const vRotX = vx * cosRY + vz * sinRY;
-            const vRotZ = -vx * sinRY + vz * cosRY;
-            const vRotY = vy * cosRX - vRotZ * sinRX;
-
-            const vDistSq = (dx - vRotX) ** 2 + (dy - vRotY) ** 2;
-
-            // Arrowhead at tip
-            if (vDistSq < 0.04) {
-              char = s.isCollapsed ? (s.collapsedBit === 0 ? '▲' : '▼') : '◆';
-              charColor = s.isCollapsed ? (s.collapsedBit === 0 ? colTeal : colAmber) : colPrimary;
+            // Render glyph
+            if (totalIntensity > 0.75) {
+              ctx.fillStyle = charColor;
             } else {
-              // Check if point lies on line segment from (0,0) to (vRotX, vRotY)
-              const lineLen = Math.hypot(vRotX, vRotY);
-              if (lineLen > 0.05) {
-                const dot = (dx * vRotX + dy * vRotY) / (lineLen * lineLen);
-                if (dot >= 0 && dot <= 1.0) {
-                  const perpDist = Math.hypot(dx - dot * vRotX, dy - dot * vRotY);
-                  if (perpDist < 0.055) {
-                    char = '*';
-                    charColor = colTeal;
-                  }
-                }
-              }
+              ctx.fillStyle = dimColor;
             }
 
-            // Outer sphere boundary silhouette
-            if (distSq > 0.92) {
-              char = '.';
-              charColor = colSecondary;
-            }
-          }
-
-          if (char !== ' ') {
-            ctx.fillStyle = charColor;
             ctx.fillText(char, c * CELL_W + xOffset, r * CELL_H);
           }
         }
+      }
+
+      // Draw transient detection points
+      for (const d of s.detections) {
+        const alpha = Math.max(0, 1.0 - d.age / d.maxAge);
+        ctx.fillStyle = isDark
+          ? `rgba(94, 234, 212, ${alpha.toFixed(2)})`
+          : `rgba(13, 148, 136, ${alpha.toFixed(2)})`;
+        ctx.fillText(d.glyph, d.c * CELL_W, d.r * CELL_H);
+      }
+
+      // Draw bright collapsed detection flash
+      if (s.detectionPoint && s.detectionPoint.brightness > 0) {
+        ctx.fillStyle = s.collapsedBit === 0 ? accentTeal : accentAmber;
+        ctx.fillText('█', s.detectionPoint.x * CELL_W, s.detectionPoint.y * CELL_H);
+        s.detectionPoint.brightness -= dt * 1.5;
       }
 
       if (!prefersReducedMotion) {
@@ -399,67 +391,46 @@ export default function QubitHero({ scrollProgress = 0, className = '' }) {
   return (
     <div
       ref={containerRef}
-      className={`w-full flex flex-col items-center select-none ${className}`}
+      className={`w-full flex flex-col items-start select-none cursor-pointer ${className}`}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       onClick={triggerCollapse}
       role="region"
-      aria-label="Interactive Bloch Sphere Qubit Visualizer"
+      aria-label="Interactive Superposition Quantum Cloud Visualizer"
     >
       {/* Screen reader live announcement */}
       <span className="sr-only">
-        Interactive Bloch sphere representing a qubit state vector in {telemetry.status}.
-        Current probability P(0) is {telemetry.p0.toFixed(2)}, P(1) is {telemetry.p1.toFixed(2)}.
-        Click or press M to perform measurement collapse.
+        Interactive quantum superposition cloud representing a qubit state vector in {telemetry.status}.
+        Upper lobe represents |0⟩ with probability {telemetry.p0.toFixed(2)}.
+        Lower lobe represents |1⟩ with probability {telemetry.p1.toFixed(2)}.
+        Click, tap, or press key M to measure and collapse the wavefunction.
       </span>
 
-      {/* Canvas Frame */}
-      <div className="w-full max-w-[480px] min-h-[350px] rounded-lg border border-[var(--edge-rest)] bg-[var(--surface-inner)]/25 backdrop-blur-sm flex flex-col items-center justify-between p-3.5 relative overflow-hidden group hover:border-[var(--edge-hover)] transition-colors cursor-crosshair">
-        {/* Top Header inside frame */}
-        <div className="w-full flex-shrink-0 flex items-center justify-between text-[9px] font-mono uppercase tracking-wider text-[var(--text-tertiary)] border-b border-[var(--edge-rest)] pb-1.5 px-1">
-          <span className="flex items-center gap-1.5">
-            <span className={`w-1.5 h-1.5 rounded-full ${stateRef.current.isCollapsed ? 'bg-[var(--col-critical)] animate-ping' : 'bg-[var(--col-standard)]'}`} />
-            <span>BLOCH SPHERE · 120×60 ASCII</span>
-          </span>
-          <span className="text-[var(--text-secondary)] font-medium">
-            {telemetry.status}
-          </span>
-        </div>
+      {/* Unboxed 2D HTML5 Canvas sitting directly on the background */}
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="w-full max-w-[460px] h-auto max-h-[320px] object-contain transition-transform duration-200"
+      />
 
-        {/* 2D HTML5 Canvas */}
-        <canvas
-          ref={canvasRef}
-          aria-hidden="true"
-          className="w-full h-auto max-h-[230px] object-contain my-auto py-1"
-        />
-
-        {/* Real-time Telemetry Readout */}
-        <div className="w-full flex-shrink-0 pt-2 border-t border-[var(--edge-rest)] px-1 flex flex-wrap items-center justify-between gap-1 text-[10px] font-mono text-[var(--text-secondary)]">
-          <div className="flex items-center gap-2">
-            <span>θ: {telemetry.theta.toFixed(2)} rad</span>
-            <span>·</span>
-            <span>φ: {telemetry.phi.toFixed(2)} rad</span>
-          </div>
-          <div className="flex items-center gap-2 font-medium">
-            <span className="text-[var(--col-standard)]">
-              P(0): {telemetry.p0.toFixed(2)}
-            </span>
-            <span>·</span>
-            <span className="text-[var(--col-critical)]">
-              P(1): {telemetry.p1.toFixed(2)}
-            </span>
-          </div>
-        </div>
-
-        {/* Action Prompt Pill */}
-        <div className="w-full flex-shrink-0 mt-1 text-[8px] md:text-[9px] uppercase tracking-wider text-[var(--text-tertiary)] text-center">
-          [ CLICK / TAP / KEY 'M' TO MEASURE &amp; COLLAPSE ]
-        </div>
+      {/* Readout beside / below the art in terminal font without card chrome */}
+      <div className="w-full max-w-[460px] pt-3 text-[10px] md:text-[11px] font-mono tracking-wider text-[var(--text-secondary)] uppercase flex flex-wrap items-center gap-x-2 gap-y-1">
+        <span>THETA {telemetry.theta.toFixed(2)} RAD</span>
+        <span>·</span>
+        <span>PHI {telemetry.phi.toFixed(2)} RAD</span>
+        <span>·</span>
+        <span className="text-[var(--col-standard)]">P(0) {telemetry.p0.toFixed(2)}</span>
+        <span>·</span>
+        <span className="text-[var(--col-critical)]">P(1) {telemetry.p1.toFixed(2)}</span>
+        <span>·</span>
+        <span>
+          LAST MEASURE: {telemetry.lastMeasure !== null ? telemetry.lastMeasure : '—'}
+        </span>
       </div>
 
       {/* Accurate Caption in Terminal Font */}
-      <p className="mt-3 text-[10px] md:text-[11px] leading-relaxed text-[var(--text-secondary)] uppercase max-w-[480px] tracking-wide font-mono-light text-left w-full">
-        A large fault-tolerant quantum computer running Shor's algorithm breaks RSA and ECC.
+      <p className="mt-2 text-[10px] md:text-[11px] leading-relaxed text-[var(--text-tertiary)] uppercase max-w-[460px] tracking-wide font-mono-light text-left">
+        A LARGE FAULT-TOLERANT QUANTUM COMPUTER RUNNING SHOR'S ALGORITHM BREAKS RSA AND ECC.
       </p>
     </div>
   );

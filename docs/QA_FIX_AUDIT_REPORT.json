@@ -1,0 +1,166 @@
+{
+  "timestamp": "2026-11-20T16:10:03.346Z",
+  "viewports": {
+    "home-360-dark": {
+      "file": "final-home-360-dark.png",
+      "bytes": 288760,
+      "status": "CAPTURED"
+    },
+    "home-768-dark": {
+      "file": "final-home-768-dark.png",
+      "bytes": 660420,
+      "status": "CAPTURED"
+    },
+    "home-1280-dark": {
+      "file": "final-home-1280-dark.png",
+      "bytes": 928342,
+      "status": "CAPTURED"
+    },
+    "home-1920-dark": {
+      "file": "final-home-1920-dark.png",
+      "bytes": 1564879,
+      "status": "CAPTURED"
+    },
+    "awareness-360-dark": {
+      "file": "final-awareness-360-dark.png",
+      "bytes": 290097,
+      "status": "CAPTURED"
+    },
+    "awareness-768-dark": {
+      "file": "final-awareness-768-dark.png",
+      "bytes": 661004,
+      "status": "CAPTURED"
+    },
+    "awareness-1280-dark": {
+      "file": "final-awareness-1280-dark.png",
+      "bytes": 924223,
+      "status": "CAPTURED"
+    },
+    "awareness-1920-dark": {
+      "file": "final-awareness-1920-dark.png",
+      "bytes": 1568152,
+      "status": "CAPTURED"
+    },
+    "access-360-dark": {
+      "file": "final-access-360-dark.png",
+      "bytes": 289635,
+      "status": "CAPTURED"
+    },
+    "access-768-dark": {
+      "file": "final-access-768-dark.png",
+      "bytes": 658865,
+      "status": "CAPTURED"
+    },
+    "access-1280-dark": {
+      "file": "final-access-1280-dark.png",
+      "bytes": 927584,
+      "status": "CAPTURED"
+    },
+    "access-1920-dark": {
+      "file": "final-access-1920-dark.png",
+      "bytes": 1567725,
+      "status": "CAPTURED"
+    },
+    "home-360-light": {
+      "file": "final-home-360-light.png",
+      "bytes": 177017,
+      "status": "CAPTURED"
+    },
+    "home-768-light": {
+      "file": "final-home-768-light.png",
+      "bytes": 400446,
+      "status": "CAPTURED"
+    },
+    "home-1280-light": {
+      "file": "final-home-1280-light.png",
+      "bytes": 589121,
+      "status": "CAPTURED"
+    },
+    "home-1920-light": {
+      "file": "final-home-1920-light.png",
+      "bytes": 907800,
+      "status": "CAPTURED"
+    },
+    "awareness-360-light": {
+      "file": "final-awareness-360-light.png",
+      "bytes": 190860,
+      "status": "CAPTURED"
+    },
+    "awareness-768-light": {
+      "file": "final-awareness-768-light.png",
+      "bytes": 401602,
+      "status": "CAPTURED"
+    },
+    "awareness-1280-light": {
+      "file": "final-awareness-1280-light.png",
+      "bytes": 585548,
+      "status": "CAPTURED"
+    },
+    "awareness-1920-light": {
+      "file": "final-awareness-1920-light.png",
+      "bytes": 907214,
+      "status": "CAPTURED"
+    },
+    "access-360-light": {
+      "file": "final-access-360-light.png",
+      "bytes": 190443,
+      "status": "CAPTURED"
+    },
+    "access-768-light": {
+      "file": "final-access-768-light.png",
+      "bytes": 400545,
+      "status": "CAPTURED"
+    },
+    "access-1280-light": {
+      "file": "final-access-1280-light.png",
+      "bytes": 586055,
+      "status": "CAPTURED"
+    },
+    "access-1920-light": {
+      "file": "final-access-1920-light.png",
+      "bytes": 908305,
+      "status": "CAPTURED"
+    }
+  },
+  "colorAudits": {},
+  "edgeAudits": {
+    "home": {
+      "totalElements": 61,
+      "rogueEdges": 0,
+      "semanticColoredElements": 2,
+      "status": "PASS"
+    },
+    "awareness": {
+      "totalElements": 53,
+      "rogueEdges": 0,
+      "semanticColoredElements": 0,
+      "status": "PASS"
+    },
+    "access": {
+      "totalElements": 48,
+      "rogueEdges": 0,
+      "semanticColoredElements": 2,
+      "status": "PASS"
+    }
+  },
+  "keyboardAudit": {
+    "shortcutsTested": [
+      "H",
+      "A",
+      "E",
+      "I",
+      "M",
+      "D"
+    ],
+    "status": "PASS"
+  },
+  "fpsAudit": {
+    "fps": 61,
+    "totalFrames": 61
+  },
+  "reducedMotionAudit": {
+    "matches": true,
+    "status": "PASS"
+  },
+  "status": "PASS"
+}
