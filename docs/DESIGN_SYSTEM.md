@@ -617,3 +617,35 @@ Order (bottom to top):
 4. Ambient lane tint: max ~8–10% radial glow (ice-teal for Standard, amber for Critical, zero geometric linework).
 5. Foreground content.
 - DELETED: Square lattice grid, contour/arc lines, login glow ring, all decorative canvas linework.
+
+---
+
+## 14. Quantum Computer Hero Asset & Compositing Architecture
+
+### 14.1 Layer Stack (Bottom to Top)
+1. **Base Layer** (`<img className="qc-base">`):
+   - High-priority preloaded responsive image (`/hero/qc-base-1x.webp` and `/hero/qc-base-2x.webp`).
+   - Aspect ratio: 640×816 (1x) / 1280×1632 (2x), ratio 0.784:1 (~4:5 portrait slot).
+   - Zero black fringe via un-premultiplied despill on both Dark (`#1a1410`) and Light (`#f0e8dc`).
+2. **Particle Canvas** (`<canvas className="qc-particles">`):
+   - Sandwiched between base machine and front-mask.
+   - Tiny Geist Mono glyphs (`0`, `1`, `0/1` superposition) flowing along wire paths.
+   - Teal (`#5eead4`) for PQC, amber (`#f59e0b`) for simulated QKD key pulses.
+3. **Front-Mask Occlusion Layer** (`<img className="qc-front-mask">`):
+   - Identical aspect ratio and pixel dimensions as base image (`/hero/qc-mask-1x.webp` and `/hero/qc-mask-2x.webp`).
+   - Opaque where foreground hardware sits: Top disc rim, Plate 1, Plate 2, Plate 3, front vertical support rods, and central column.
+   - `pointer-events: none`, pixel-identical alpha blend that occludes particles passing behind solid hardware with zero visual seam.
+4. **Readout & Caption**:
+   - Terminal font telemetry readout (`THETA`, `PHI`, `P(0)`, `P(1)`, `LAST MEASURE`) and educational caption.
+   - Disclaimer: `"ILLUSTRATIVE RENDER · SIMULATED DATA FLOW"`.
+
+### 14.2 Asset Table
+| Asset Name | Resolution | Format | Purpose |
+| :--- | :--- | :--- | :--- |
+| `qc-base-1x.webp` / `2x.webp` | 640×816 / 1280×1632 | WebP (Lossless) | Copper base cutout for Dark theme |
+| `qc-mask-1x.webp` / `2x.webp` | 640×816 / 1280×1632 | WebP (Lossless) | Occlusion mask for plates and column |
+| `qc-base-mono-1x.webp` / `2x.webp` | 640×816 / 1280×1632 | WebP (Lossless) | Warm-monochrome baked asset |
+| `qc-mask-mono-1x.webp` / `2x.webp` | 640×816 / 1280×1632 | WebP (Lossless) | Warm-monochrome occlusion mask |
+| `qc-base-light-1x.webp` / `2x.webp` | 640×816 / 1280×1632 | WebP (Lossless) | Light theme base with ambient contact shadow |
+| `qc-base-light-mono-1x.webp` / `2x.webp` | 640×816 / 1280×1632 | WebP (Lossless) | Light theme warm-monochrome base with shadow |
+
