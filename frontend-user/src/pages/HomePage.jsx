@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import TitleWipe from '../components/landing/TitleWipe';
 import ScrambleText from '../components/landing/ScrambleText';
-import QubitHero from '../components/landing/QubitHero';
+import QuantumComputerHero from '../home/qc/QuantumComputerHero';
 import ShortcutBar from '../components/landing/ShortcutBar';
 import AwarenessSection from '../components/landing/AwarenessSection';
 import AccessSection from '../components/landing/AccessSection';
@@ -123,18 +123,18 @@ export default function HomePage() {
       {/* ── SECTION 1: HOME (Page 01 / 03) ─────────────────────────────────── */}
       <section
         id="home"
-        className="min-h-screen w-full snap-start flex flex-col justify-between p-6 sm:p-8 md:p-12 relative pb-28 sm:pb-32"
+        className="h-screen min-h-[640px] w-full snap-start flex flex-col justify-between p-6 sm:p-8 md:p-10 relative pb-16 sm:pb-20 overflow-hidden"
       >
         {/* Top Edge: Giant Edge-to-Edge Dot-Matrix Title */}
-        <header className="pt-2 md:pt-4 w-full overflow-visible">
+        <header className="pt-1 md:pt-2 w-full overflow-visible">
           <TitleWipe />
         </header>
 
-        {/* Hero Area: Unboxed Superposition Qubit (Left) + 4 Diagonally Staggered Info Lines (Right) */}
-        <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto py-6">
-          {/* Left Column (~35% width): Unboxed Superposition Qubit Volume */}
+        {/* Hero Area: Unboxed Photographic Quantum Computer Chandelier (Left) + 4 Diagonally Staggered Info Lines (Right) */}
+        <main className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center my-auto py-2">
+          {/* Left Column (~35% width): Unboxed Photographic Quantum Computer Chandelier */}
           <div className="lg:col-span-5 flex flex-col justify-center">
-            <QubitHero scrollProgress={scrollProgress} />
+            <QuantumComputerHero scrollProgress={scrollProgress} />
           </div>
 
           {/* Right Column (~65% width): 4 Diagonally Staggered Info Lines */}
@@ -190,7 +190,7 @@ export default function HomePage() {
         </main>
 
         {/* Lower Right Navigation Prompt - Raised above floating shortcut capsule */}
-        <footer className="flex justify-end pt-2 pb-16 sm:pb-20">
+        <footer className="flex justify-end pt-1 pb-4 sm:pb-6">
           <div className="text-[10px] md:text-xs uppercase tracking-widest text-[var(--text-secondary)] font-mono-light flex items-center gap-1.5">
             <span className="text-[var(--text-tertiary)] mr-1">/</span>
             <span>{isTouchDevice ? 'SCROLL TO NAVIGATE' : 'USE YOUR KEYBOARD TO NAVIGATE'}</span>

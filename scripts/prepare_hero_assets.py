@@ -22,6 +22,11 @@ def run():
     # Smooth step between 3.0 and 32.0 to catch delicate wire fringes without clipping
     alpha = np.where(max_c < 3.0, 0.0, np.minimum(1.0, (max_c - 3.0) / 28.0))
     
+    # 2b. Soft Top Feather (Y 0..45) so the top cylinder dissolves organically into the background
+    for y in range(45):
+        fade = (y / 45.0) ** 1.6
+        alpha[y, :] *= fade
+    
     # 3. Despill / un-premultiply to eliminate black fringes on light backgrounds
     unpremul = np.zeros_like(arr)
     for c in range(3):
