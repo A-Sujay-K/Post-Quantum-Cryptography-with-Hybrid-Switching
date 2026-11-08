@@ -266,7 +266,7 @@ export default function QuantumComputerHero({ scrollProgress = 0, className = ''
       ref={containerRef}
       onPointerMove={handlePointerMove}
       onClick={executeMeasure}
-      className={`relative w-full max-w-[240px] sm:max-w-[280px] md:max-w-[320px] lg:max-w-[350px] xl:max-w-[380px] mx-auto select-none flex flex-col items-start cursor-pointer group ${className}`}
+      className={`relative w-full max-w-[220px] sm:max-w-[250px] md:max-w-[280px] lg:max-w-[310px] xl:max-w-[330px] mx-auto select-none flex flex-col items-start cursor-pointer group ${className}`}
       style={sliceCollapseStyle}
     >
       {/* ── 3-Layer Quantum Computer Chandelier ────────────────────────────── */}
@@ -334,14 +334,13 @@ export default function QuantumComputerHero({ scrollProgress = 0, className = ''
           </span>
         </div>
 
-        {/* Action Prompt Pill & Disclaimer */}
-        <div className="flex items-center justify-between text-[9px] text-[var(--text-tertiary)] tracking-widest pt-0.5">
-          <span>[ CLICK / TAP / KEY 'M' TO MEASURE ]</span>
-          <span className="opacity-75">ILLUSTRATIVE RENDER · SIMULATED DATA FLOW</span>
+        {/* Nature of Render Disclaimer (Quiet Terminal Font) */}
+        <div className="text-[9px] text-[var(--text-tertiary)] tracking-widest uppercase opacity-75">
+          ILLUSTRATIVE RENDER · SIMULATED DATA FLOW
         </div>
 
         {/* Educational Caption */}
-        <p className="text-[10px] tracking-normal text-[var(--text-tertiary)] mt-1 max-w-[460px] normal-case leading-relaxed">
+        <p className="text-[10px] tracking-normal text-[var(--text-tertiary)] max-w-[440px] normal-case leading-relaxed">
           A large fault-tolerant quantum computer running Shor's algorithm breaks RSA and ECC.
         </p>
       </div>

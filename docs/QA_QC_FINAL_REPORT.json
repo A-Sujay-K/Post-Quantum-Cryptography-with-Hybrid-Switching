@@ -1,0 +1,141 @@
+{
+  "timestamp": "2026-11-20T17:24:28.643Z",
+  "pathGate": "GREEN",
+  "fps": {
+    "fps": 61,
+    "totalFrames": 61
+  },
+  "domAudit": {
+    "home": {
+      "totalElements": 70,
+      "rogueEdges": 0,
+      "semanticDots": 2,
+      "status": "PASS"
+    },
+    "awareness": {
+      "totalElements": 53,
+      "rogueEdges": 0,
+      "semanticDots": 0,
+      "status": "PASS"
+    },
+    "access": {
+      "totalElements": 48,
+      "rogueEdges": 0,
+      "semanticDots": 2,
+      "status": "PASS"
+    }
+  },
+  "keyboardAudit": {
+    "shortcuts": [
+      "H",
+      "A",
+      "E",
+      "I",
+      "M",
+      "D"
+    ],
+    "status": "PASS"
+  },
+  "reducedMotion": {
+    "matches": true,
+    "status": "PASS"
+  },
+  "captures": {
+    "home-360-dark": {
+      "file": "final-qc-home-360-dark.png",
+      "bytes": 328472
+    },
+    "awareness-360-dark": {
+      "file": "final-qc-awareness-360-dark.png",
+      "bytes": 318364
+    },
+    "access-360-dark": {
+      "file": "final-qc-access-360-dark.png",
+      "bytes": 182842
+    },
+    "home-768-dark": {
+      "file": "final-qc-home-768-dark.png",
+      "bytes": 722392
+    },
+    "awareness-768-dark": {
+      "file": "final-qc-awareness-768-dark.png",
+      "bytes": 685307
+    },
+    "access-768-dark": {
+      "file": "final-qc-access-768-dark.png",
+      "bytes": 501521
+    },
+    "home-1280-dark": {
+      "file": "final-qc-home-1280-dark.png",
+      "bytes": 1047508
+    },
+    "awareness-1280-dark": {
+      "file": "final-qc-awareness-1280-dark.png",
+      "bytes": 903387
+    },
+    "access-1280-dark": {
+      "file": "final-qc-access-1280-dark.png",
+      "bytes": 719259
+    },
+    "home-1920-dark": {
+      "file": "final-qc-home-1920-dark.png",
+      "bytes": 1708523
+    },
+    "awareness-1920-dark": {
+      "file": "final-qc-awareness-1920-dark.png",
+      "bytes": 1582486
+    },
+    "access-1920-dark": {
+      "file": "final-qc-access-1920-dark.png",
+      "bytes": 1395773
+    },
+    "home-360-light": {
+      "file": "final-qc-home-360-light.png",
+      "bytes": 244169
+    },
+    "awareness-360-light": {
+      "file": "final-qc-awareness-360-light.png",
+      "bytes": 223687
+    },
+    "access-360-light": {
+      "file": "final-qc-access-360-light.png",
+      "bytes": 131285
+    },
+    "home-768-light": {
+      "file": "final-qc-home-768-light.png",
+      "bytes": 480353
+    },
+    "awareness-768-light": {
+      "file": "final-qc-awareness-768-light.png",
+      "bytes": 461048
+    },
+    "access-768-light": {
+      "file": "final-qc-access-768-light.png",
+      "bytes": 297834
+    },
+    "home-1280-light": {
+      "file": "final-qc-home-1280-light.png",
+      "bytes": 745585
+    },
+    "awareness-1280-light": {
+      "file": "final-qc-awareness-1280-light.png",
+      "bytes": 608450
+    },
+    "access-1280-light": {
+      "file": "final-qc-access-1280-light.png",
+      "bytes": 448415
+    },
+    "home-1920-light": {
+      "file": "final-qc-home-1920-light.png",
+      "bytes": 1075664
+    },
+    "awareness-1920-light": {
+      "file": "final-qc-awareness-1920-light.png",
+      "bytes": 944993
+    },
+    "access-1920-light": {
+      "file": "final-qc-access-1920-light.png",
+      "bytes": 807955
+    }
+  }
+}
