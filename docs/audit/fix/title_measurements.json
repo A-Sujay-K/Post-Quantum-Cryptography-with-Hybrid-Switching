@@ -1,0 +1,106 @@
+{
+  "360": {
+    "viewportW": 360,
+    "contentW": 312,
+    "pad": 48,
+    "ratioLine2At100px": 1140,
+    "desktopFontSize": 27.36842105263158,
+    "mobileFontSize": 47.27272727272727,
+    "mobWidths": [
+      {
+        "line": "ARE YOU",
+        "width": 420
+      },
+      {
+        "line": "READY FOR",
+        "width": 540
+      },
+      {
+        "line": "THE QUANTUM",
+        "width": 660
+      },
+      {
+        "line": "FUTURE?",
+        "width": 420
+      }
+    ]
+  },
+  "768": {
+    "viewportW": 768,
+    "contentW": 704,
+    "pad": 64,
+    "ratioLine2At100px": 1140,
+    "desktopFontSize": 61.75438596491228,
+    "mobileFontSize": 106.66666666666667,
+    "mobWidths": [
+      {
+        "line": "ARE YOU",
+        "width": 420
+      },
+      {
+        "line": "READY FOR",
+        "width": 540
+      },
+      {
+        "line": "THE QUANTUM",
+        "width": 660
+      },
+      {
+        "line": "FUTURE?",
+        "width": 420
+      }
+    ]
+  },
+  "1280": {
+    "viewportW": 1280,
+    "contentW": 1200,
+    "pad": 80,
+    "ratioLine2At100px": 1140,
+    "desktopFontSize": 105.26315789473684,
+    "mobileFontSize": 181.81818181818184,
+    "mobWidths": [
+      {
+        "line": "ARE YOU",
+        "width": 420
+      },
+      {
+        "line": "READY FOR",
+        "width": 540
+      },
+      {
+        "line": "THE QUANTUM",
+        "width": 660
+      },
+      {
+        "line": "FUTURE?",
+        "width": 420
+      }
+    ]
+  },
+  "1920": {
+    "viewportW": 1920,
+    "contentW": 1840,
+    "pad": 80,
+    "ratioLine2At100px": 1140,
+    "desktopFontSize": 161.4035087719298,
+    "mobileFontSize": 278.7878787878788,
+    "mobWidths": [
+      {
+        "line": "ARE YOU",
+        "width": 420
+      },
+      {
+        "line": "READY FOR",
+        "width": 540
+      },
+      {
+        "line": "THE QUANTUM",
+        "width": 660
+      },
+      {
+        "line": "FUTURE?",
+        "width": 420
+      }
+    ]
+  }
+}

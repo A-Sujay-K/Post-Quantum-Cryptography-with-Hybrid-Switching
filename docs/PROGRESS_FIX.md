@@ -1,22 +1,26 @@
-# PQC Secure Comm — Home Page Correction Pass Progress (Phases R0–R4)
+# PQC Secure Comm — Full Quantum Computer Hero & New Title Pass (Phases R0–R4)
 
-> **Mandate**: Principal creative developer & product designer correction pass for the **Home Page ONLY**.
-> Re-aligning the experience with `yannickgregoire.nl` Awwwards-level craft standards, authentic dot-matrix typography, unboxed Superposition Cloud hero art, four diagonally staggered scramble info lines, floating liquid glass capsule shortcut bar, concise merged Awareness page, and interactive Liquid Glass Access cards. Profile image and contacts are untouched.
+> **Mandate**: Comprehensive Home Page correction pass implementing:
+> 1. **New Big Title**: `"ARE YOU READY FOR THE QUANTUM FUTURE?"` in Doto dot-matrix (2 lines desktop, 4 lines mobile), sized to exact content width with zero right bleed clipping the `?`.
+> 2. **Four Renamed Info Lines**: Diagonally staggered scramble lines (`/ POST-QUANTUM CRYPTOGRAPHY`, `/ QUANTUM KEY DISTRIBUTION`, `/ HYBRID SWITCHING`) with reserved monospace `ch` widths to eliminate layout shift, accessible ARIA labels, and touch tap-toggle.
+> 3. **Full Machine Hero**: Replacing cropped chandelier with the **COMPLETE** dilution-refrigerator machine (complete top disc, whole rim, 3 plates, column, coupling rings, and complete bottom plate).
+> 4. **Retraced Path Network**: Clean wire bundles and central column with zero border clipping (silhouette alpha = 0 along all 4 image borders).
+> 5. **Two-Line Fixed Readout**: Clean pair layout without stray separators.
 >
 > **Run Protocol**:
-> 1. ONE phase per run: the next unchecked one. List touched files before editing. Touch nothing outside the phase.
-> 2. At the end: tick the phase with a 3-line summary, screenshot at 360 / 768 / 1280 / 1920px in BOTH themes, place next to reference frames, fix differences, report, STOP.
-> 3. R0 ends with a STOP for user approval.
+> 1. ONE phase per run. List files touched BEFORE editing. Touch nothing outside the phase.
+> 2. End of phase: tick with 3-line summary, screenshots at 360 / 768 / 1280 / 1920px in BOTH themes, fix differences, report, STOP.
+> 3. **R0 ends with a STOP for user approval.**
 
 ---
 
 ## 📋 Master Phase Index
 
-- [x] **R0 — Visual Diagnosis, Architectural Audit & Correction Plan**
-- [x] **R1 — Home Layout Scaffolding, PQCHS Title Bleed, 4 Scramble Lines & Glass Capsule Bar**
-- [x] **R2 — Superposition Cloud Hero Art, Pointer Spring Physics & Slice-Collapse Transitions**
-- [x] **R3 — Merged Concise Awareness & Liquid Glass Access Experience (with Micro-Animations)**
-- [x] **R4 — Multi-Viewport Audit (360/768/1280/1920px), Dual-Theme Verification & 60fps QA**
+- [x] **R0 — Asset Diagnosis, 200% Wire Crop, Doto '?' Check, Title Advance Math & A/B Decision** (STOP FOR USER APPROVAL)
+- [ ] **R1 — New Title ("ARE YOU READY FOR THE QUANTUM FUTURE?"), 4 Renamed Scramble Lines with Reserved Widths, Document `<title>` & Fixed 2-Line Readout Layout**
+- [ ] **R2 — Full Machine Asset Pipeline & Complete Retraced Path Network (Base + Canvas + Occlusion Front-Mask + Green Gate Script)**
+- [ ] **R3 — Micro-Interactions, Top-to-Bottom Load Scan, Parallax, Wavefunction Measure Shockwave, & Scroll Slice-Collapse**
+- [ ] **R4 — Multi-Viewport Audit (360/768/1280/1920px), Dual-Theme Verification, 60fps Frame Budget & Final Sign-Off**
 
 ---
 
