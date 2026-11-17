@@ -319,19 +319,25 @@ export default function QuantumComputerHero({ scrollProgress = 0, className = ''
 
       {/* ── Readout Telemetry & Micro Caption ──────────────────────────────── */}
       <div className="mt-3 sm:mt-4 w-full flex flex-col gap-1.5 px-1 font-mono-light text-[10px] sm:text-[11px] tracking-wider text-[var(--text-secondary)] uppercase">
-        {/* Real Vector Readout */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span>THETA {telemetry.theta.toFixed(2)} RAD</span>
-          <span className="text-[var(--text-tertiary)]">·</span>
-          <span>PHI {telemetry.phi.toFixed(2)} RAD</span>
-          <span className="text-[var(--text-tertiary)]">·</span>
-          <span className="text-[var(--col-standard)]">P(0) {telemetry.p0.toFixed(2)}</span>
-          <span className="text-[var(--text-tertiary)]">·</span>
-          <span className="text-[var(--col-critical)]">P(1) {telemetry.p1.toFixed(2)}</span>
-          <span className="text-[var(--text-tertiary)]">·</span>
-          <span className="text-[var(--text-primary)]">
-            LAST MEASURE: {telemetry.lastMeasure !== null ? telemetry.lastMeasure : '—'}
-          </span>
+        {/* Real Vector Readout: Two fixed lines, nowrap units, zero stray separators */}
+        <div className="flex flex-col gap-1 text-[10px] sm:text-[11px] font-mono">
+          {/* Line 1: Angles */}
+          <div className="flex items-center gap-2 whitespace-nowrap">
+            <span>THETA {telemetry.theta.toFixed(2)} RAD</span>
+            <span className="text-[var(--text-tertiary)]">·</span>
+            <span>PHI {telemetry.phi.toFixed(2)} RAD</span>
+          </div>
+
+          {/* Line 2: Probabilities & Measurement */}
+          <div className="flex items-center gap-2 whitespace-nowrap">
+            <span className="text-[var(--col-standard)]">P(0) {telemetry.p0.toFixed(2)}</span>
+            <span className="text-[var(--text-tertiary)]">·</span>
+            <span className="text-[var(--col-critical)]">P(1) {telemetry.p1.toFixed(2)}</span>
+            <span className="text-[var(--text-tertiary)]">·</span>
+            <span className="text-[var(--text-primary)]">
+              LAST MEASURE: {telemetry.lastMeasure !== null ? telemetry.lastMeasure : '—'}
+            </span>
+          </div>
         </div>
 
         {/* Nature of Render Disclaimer (Quiet Terminal Font) */}
