@@ -6,7 +6,6 @@ const DEFAULT_CHARS = '▒░█▓/-+_\\*#%~=:01';
  * ScrambleText
  * High-craft terminal text scramble animation.
  * Characters resolve left-to-right with randomized noise glyphs and staggering.
- * Supports hover, focus, tap-toggle (with outside click restore), and reserved monospace width.
  */
 export default function ScrambleText({
   text,
@@ -15,8 +14,6 @@ export default function ScrambleText({
   duration = 600,
   scrambleChars = DEFAULT_CHARS,
   trigger = 'mount', // 'mount' | 'inView' | 'hover'
-  reserveWidth = null, // number of ch units to reserve to prevent layout shift
-  ariaLabel = null,
   className = '',
   onComplete = null,
   as: Component = 'span',
@@ -25,7 +22,6 @@ export default function ScrambleText({
   const [targetText, setTargetText] = useState(text);
   const [displayText, setDisplayText] = useState('');
   const [isHovered, setIsHovered] = useState(false);
-  const [isToggled, setIsToggled] = useState(false);
   const [hasTriggered, setHasTriggered] = useState(false);
   const elementRef = useRef(null);
   const animationFrameRef = useRef(null);
@@ -34,27 +30,13 @@ export default function ScrambleText({
   const prefersReducedMotion = typeof window !== 'undefined'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const active = isHovered || isToggled;
-
   useEffect(() => {
-    if (active && hoverText) {
+    if (isHovered && hoverText) {
       setTargetText(hoverText);
     } else {
       setTargetText(text);
     }
-  }, [active, hoverText, text]);
-
-  // Outside click listener to restore base text on touch tap
-  useEffect(() => {
-    if (!hoverText) return;
-    const handleDocClick = (e) => {
-      if (elementRef.current && !elementRef.current.contains(e.target)) {
-        setIsToggled(false);
-      }
-    };
-    document.addEventListener('click', handleDocClick);
-    return () => document.removeEventListener('click', handleDocClick);
-  }, [hoverText]);
+  }, [isHovered, hoverText, text]);
 
   const runScramble = useCallback((str) => {
     if (prefersReducedMotion) {
@@ -83,12 +65,15 @@ export default function ScrambleText({
         const charSettleTime = charStartTime + charDelay * 1.5;
 
         if (elapsed < charStartTime) {
+          // Still waiting to start scrambling or initial placeholder
           result += chars[Math.floor(Math.random() * chars.length)];
           allSettled = false;
         } else if (elapsed < charSettleTime) {
+          // Currently scrambling
           result += chars[Math.floor(Math.random() * chars.length)];
           allSettled = false;
         } else {
+          // Settled to target character
           result += str[i];
         }
       }
@@ -106,18 +91,16 @@ export default function ScrambleText({
     animationFrameRef.current = requestAnimationFrame(tick);
   }, [duration, scrambleChars, prefersReducedMotion, onComplete]);
 
-  // Initial mount / inView trigger
+  // Handle trigger logic
   useEffect(() => {
     if (trigger === 'hover') {
       setDisplayText(targetText);
-      setHasTriggered(true);
       return;
     }
 
     if (trigger === 'mount') {
       const timer = setTimeout(() => {
         runScramble(targetText);
-        setHasTriggered(true);
       }, delay);
       return () => {
         clearTimeout(timer);
@@ -147,15 +130,14 @@ export default function ScrambleText({
     }
   }, [targetText, trigger, delay, runScramble, hasTriggered]);
 
-  // When active state changes (hover / focus / tap)
+  // When hoverText switches targetText
   useEffect(() => {
-    if (!hasTriggered && trigger !== 'hover') return;
-    if (active && hoverText) {
+    if (isHovered && hoverText) {
       runScramble(hoverText);
-    } else if (!active && hoverText && displayText) {
+    } else if (!isHovered && hoverText && displayText) {
       runScramble(text);
     }
-  }, [active, hoverText, text, runScramble, hasTriggered, trigger]);
+  }, [isHovered, hoverText, text, runScramble]);
 
   const handleMouseEnter = () => {
     if (hoverText) setIsHovered(true);
@@ -173,32 +155,19 @@ export default function ScrambleText({
     if (hoverText) setIsHovered(false);
   };
 
-  const handleClick = (e) => {
-    if (hoverText) {
-      setIsToggled((prev) => !prev);
-    }
-  };
-
-  const computedAriaLabel = ariaLabel || (hoverText ? `${text}. Detail: ${hoverText}` : text);
-
   return (
     <Component
       ref={elementRef}
-      className={`select-none focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--col-standard)] rounded-sm ${className}`}
-      aria-label={computedAriaLabel}
+      className={className}
+      aria-label={targetText}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      onClick={handleClick}
       tabIndex={hoverText ? 0 : undefined}
-      role={hoverText ? 'button' : undefined}
       {...props}
     >
-      <span
-        aria-hidden="true"
-        style={reserveWidth ? { display: 'inline-block', minWidth: `${reserveWidth}ch` } : undefined}
-      >
+      <span aria-hidden="true">
         {displayText || targetText}
       </span>
     </Component>

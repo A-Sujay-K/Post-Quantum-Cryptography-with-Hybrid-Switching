@@ -74,9 +74,6 @@ export default function AwarenessSection() {
             <p className="text-justify font-sans">
               <strong className="text-[var(--text-primary)] font-medium">Autonomous Switching:</strong> Real-time threat arbitration computes a quantum risk score (<em className="font-mono">Q_TL</em>) per payload, instantly routing high-sensitivity traffic into isolated Critical lanes.
             </p>
-            <div className="font-mono text-[10px] sm:text-[11px] text-[var(--col-standard)] tracking-wider border-l-2 border-[var(--col-standard)] pl-2.5 py-0.5 mt-0.5 opacity-90">
-              Q_TL &gt;= 0.70 &rarr; CRITICAL LANE (AUTONOMOUS ARBITRATION)
-            </div>
           </div>
         </div>
 

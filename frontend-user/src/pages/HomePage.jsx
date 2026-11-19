@@ -149,41 +149,38 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Line 2: Post-Quantum Cryptography (Stagger 1) with Teal Dot */}
-            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-2 sm:pl-6 md:pl-10 lg:pl-16 text-[var(--text-primary)] group cursor-pointer flex items-center">
+            {/* Line 2: PQC Algorithm (Stagger 1) with Teal Dot */}
+            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-4 sm:pl-10 md:pl-16 lg:pl-20 text-[var(--text-primary)] group cursor-pointer">
               <span className="text-[var(--text-tertiary)] mr-2">/</span>
-              <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[var(--col-standard)] mr-2.5 align-middle opacity-90 group-hover:scale-125 transition-transform flex-shrink-0" />
+              <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[var(--col-standard)] mr-2.5 align-middle opacity-90 group-hover:scale-125 transition-transform" />
               <ScrambleText
-                text="POST-QUANTUM CRYPTOGRAPHY"
+                text="PQC"
                 hoverText="ML-KEM-768 + ML-DSA-65"
-                reserveWidth={25}
                 delay={450}
                 duration={500}
-                className="hover:text-[var(--col-standard)] focus:text-[var(--col-standard)] transition-colors"
+                className="hover:text-[var(--col-standard)] transition-colors"
               />
             </div>
 
-            {/* Line 3: Quantum Key Distribution (Stagger 2) with Amber Dot */}
-            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-4 sm:pl-12 md:pl-20 lg:pl-32 text-[var(--text-primary)] group cursor-pointer flex items-center">
+            {/* Line 3: QKD / OTP (Stagger 2) with Amber Dot */}
+            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-8 sm:pl-20 md:pl-32 lg:pl-40 text-[var(--text-primary)] group cursor-pointer">
               <span className="text-[var(--text-tertiary)] mr-2">/</span>
-              <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[var(--col-critical)] mr-2.5 align-middle opacity-90 group-hover:scale-125 transition-transform flex-shrink-0" />
+              <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[var(--col-critical)] mr-2.5 align-middle opacity-90 group-hover:scale-125 transition-transform" />
               <ScrambleText
-                text="QUANTUM KEY DISTRIBUTION"
+                text="QKD"
                 hoverText="256-BIT ONE-TIME KEYS . SIMULATED"
-                reserveWidth={32}
                 delay={700}
                 duration={500}
-                className="hover:text-[var(--col-critical)] focus:text-[var(--col-critical)] transition-colors"
+                className="hover:text-[var(--col-critical)] transition-colors"
               />
             </div>
 
-            {/* Line 4: Hybrid Switching (Stagger 3, No Dot) */}
-            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-6 sm:pl-18 md:pl-28 lg:pl-44 text-[var(--text-primary)] group cursor-pointer flex items-center">
+            {/* Line 4: Dynamic Switching (Stagger 3) */}
+            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-12 sm:pl-28 md:pl-44 lg:pl-56 text-[var(--text-primary)] group cursor-pointer">
               <span className="text-[var(--text-tertiary)] mr-2">/</span>
               <ScrambleText
-                text="HYBRID SWITCHING"
-                hoverText="A NEW STANDARD FOR DIGITAL SECURITY"
-                reserveWidth={35}
+                text="SWITCHING"
+                hoverText={`Q_TL >= ${CRITICAL_THRESHOLD} -> CRITICAL LANE`}
                 delay={950}
                 duration={500}
                 className="hover:text-[var(--text-primary)] underline decoration-[var(--edge-rest)] hover:decoration-[var(--col-standard)] transition-colors"

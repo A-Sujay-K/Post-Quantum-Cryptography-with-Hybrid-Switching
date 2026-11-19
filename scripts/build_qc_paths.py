@@ -4,58 +4,56 @@ from PIL import Image
 import numpy as np
 
 def run():
-    im = Image.open(r'C:\Users\asuja\.gemini\antigravity\scratch\pqc-secure-comm\frontend-user\public\hero\qc-base-1x.png')
+    img_path = r'C:\Users\asuja\.gemini\antigravity\scratch\pqc-secure-comm\frontend-user\public\hero\qc-base-1x.png'
+    im = Image.open(img_path)
     w, h = im.size
     alpha = np.array(im)[:, :, 3]
     
     print(f'Building verified wire path network on {w}x{h} canvas...')
     
     N_WIRES = 32
-    centerX = 322.0
+    centerX = 320.0
     
-    # Snap any (x, y) coordinate directly to the nearest physical wire / structural feature
+    # Snap (x, y) coordinate directly to the nearest physical wire / structural feature with alpha >= 12
     def snap_to_wire(x, y):
         iy = int(round(y))
         ix = int(round(x))
         iy = max(0, min(h - 1, iy))
         ix = max(0, min(w - 1, ix))
         
-        if alpha[iy, ix] >= 18:
+        if alpha[iy, ix] >= 12:
             return float(ix)
             
         best_x = ix
         best_val = alpha[iy, ix]
         # Search outward in both directions for strongest wire peak
-        for r in range(1, 40):
+        for r in range(1, 50):
             for candidate in [ix - r, ix + r]:
                 if 0 <= candidate < w:
                     val = alpha[iy, candidate]
                     if val > best_val:
                         best_val = val
                         best_x = candidate
-                        if best_val >= 25:
+                        if best_val >= 18:
                             return float(best_x)
                             
         # If still not on a wire, walk towards centerX until hitting the wire bundle
         step = -1 if ix > centerX else 1
         cur_x = ix
         while 0 <= cur_x < w and abs(cur_x - centerX) > 5:
-            if alpha[iy, cur_x] >= 18:
+            if alpha[iy, cur_x] >= 12:
                 return float(cur_x)
             cur_x += step
             
         return float(best_x)
 
-    # ── Level Definitions ───────────────────────────────────────────────────
-    y_ring = 180.0
-    y_p1_in = 335.0
-    y_p1_out = 350.0
-    y_p2_in = 515.0
-    y_p2_out = 535.0
-    y_p3_in = 715.0
-    y_p3_out = 740.0
-    y_conv = 770.0
-    y_exit = 790.0
+    # ── Level Definitions for 640x640 Canvas ─────────────────────────────────
+    y_ring = 182.0
+    y_p1_in = 302.0
+    y_p2_in = 428.0
+    y_p3_in = 558.0
+    y_conv = 590.0
+    y_exit = 612.0
     
     # Spread factors across stages (left wires and right wires)
     u_vals = np.linspace(-1.0, 1.0, N_WIRES)
@@ -67,13 +65,13 @@ def run():
     
     for u in u_vals:
         sign = 1.0 if u >= 0 else -1.0
-        mag = abs(u) ** 0.88
+        mag = abs(u) ** 0.82
         
-        # Initial estimates based on visual chandelier geometry
-        xr_est = centerX + sign * (38.0 + mag * 215.0)
-        xp1_est = centerX + sign * (35.0 + mag * 180.0)
-        xp2_est = centerX + sign * (38.0 + mag * 210.0)
-        xp3_est = centerX + sign * (38.0 + mag * 215.0)
+        # Geometry spans covering left (X ~ 116..310) and right (X ~ 330..524)
+        xr_est = centerX + sign * (30.0 + mag * 175.0)
+        xp1_est = centerX + sign * (28.0 + mag * 182.0)
+        xp2_est = centerX + sign * (30.0 + mag * 182.0)
+        xp3_est = centerX + sign * (30.0 + mag * 182.0)
         
         x_ring.append(snap_to_wire(xr_est, y_ring))
         x_p1.append(snap_to_wire(xp1_est, y_p1_in))
@@ -108,7 +106,6 @@ def run():
         for i in range(N_SAMPLES + 1):
             t = i / float(N_SAMPLES)
             pt = bezier_pt(p0, p1, p2, p3, t)
-            # Snap X directly onto physical wire at this Y!
             snapped_x = snap_to_wire(pt[0], pt[1])
             raw_pts.append([snapped_x, pt[1]])
             
@@ -130,10 +127,12 @@ def run():
             frac = (target_d - dists[idx]) / seg_len if seg_len > 1e-5 else 0.0
             x = raw_pts[idx][0] + frac * (raw_pts[idx + 1][0] - raw_pts[idx][0])
             y = raw_pts[idx][1] + frac * (raw_pts[idx + 1][1] - raw_pts[idx][1])
-            # Ensure final LUT point is strictly on the wire
             sx = snap_to_wire(x, y)
             lut_pts.append([round(sx, 2), round(y, 2)])
             
+        # Ensure exact match at endpoints
+        lut_pts[0] = [p0[0], p0[1]]
+        lut_pts[-1] = [p3[0], p3[1]]
         return round(total_len, 2), lut_pts
 
     # 1. Entry Nodes (Top Ring)
@@ -177,7 +176,7 @@ def run():
         p3 = [nodes[nid_out]['x'], nodes[nid_out]['y']]
         
         sign = 1.0 if p0[0] >= centerX else -1.0
-        sway = sign * 10.0 * (1.0 + abs(i - N_WIRES/2) / float(N_WIRES))
+        sway = sign * 8.0 * (1.0 + abs(i - N_WIRES/2) / float(N_WIRES))
         cp1 = [p0[0] + sway, p0[1] + (p3[1] - p0[1]) * 0.33]
         cp2 = [p3[0] - sway, p0[1] + (p3[1] - p0[1]) * 0.67]
         
@@ -229,7 +228,7 @@ def run():
         p3 = [nodes[nid_out]['x'], nodes[nid_out]['y']]
         
         sign = 1.0 if p0[0] >= centerX else -1.0
-        sway = sign * 10.0 * (1.0 + abs(i - N_WIRES/2) / float(N_WIRES))
+        sway = sign * 8.0 * (1.0 + abs(i - N_WIRES/2) / float(N_WIRES))
         cp1 = [p0[0] + sway, p0[1] + (p3[1] - p0[1]) * 0.33]
         cp2 = [p3[0] - sway, p0[1] + (p3[1] - p0[1]) * 0.67]
         
@@ -257,8 +256,8 @@ def run():
         
         p0 = [nodes[nid_in]['x'], nodes[nid_in]['y']]
         p3 = [nodes['col-junction']['x'], nodes['col-junction']['y']]
-        cp1 = [p0[0], p0[1] + 15.0]
-        cp2 = [centerX + (p0[0] - centerX) * 0.25, y_conv - 10.0]
+        cp1 = [p0[0], p0[1] + 12.0]
+        cp2 = [centerX + (p0[0] - centerX) * 0.25, y_conv - 8.0]
         
         pts = [p0, cp1, cp2, p3]
         length, lut = compute_snapped_lut(pts)
@@ -283,8 +282,8 @@ def run():
     # Path down the lower column to exit
     p_col_down = [
         [nodes['col-junction']['x'], nodes['col-junction']['y']],
-        [centerX, y_conv + 6.0],
-        [centerX, y_exit - 6.0],
+        [centerX, y_conv + 5.0],
+        [centerX, y_exit - 5.0],
         [nodes['col-exit']['x'], nodes['col-exit']['y']]
     ]
     length_cd, lut_cd = compute_snapped_lut(p_col_down)
@@ -323,9 +322,9 @@ def run():
     nodes['col-junction']['in'].append('path-col-spine')
 
     rings = [
-        {'id': 'ring-stage1', 'stage': 1, 'y': 250.0, 'height': 24.0, 'x': centerX},
-        {'id': 'ring-stage2', 'stage': 2, 'y': 435.0, 'height': 24.0, 'x': centerX},
-        {'id': 'ring-stage3', 'stage': 3, 'y': 630.0, 'height': 24.0, 'x': centerX}
+        {'id': 'ring-stage1', 'stage': 1, 'y': 240.0, 'height': 20.0, 'x': centerX},
+        {'id': 'ring-stage2', 'stage': 2, 'y': 365.0, 'height': 20.0, 'x': centerX},
+        {'id': 'ring-stage3', 'stage': 3, 'y': 492.0, 'height': 20.0, 'x': centerX}
     ]
 
     output_data = {

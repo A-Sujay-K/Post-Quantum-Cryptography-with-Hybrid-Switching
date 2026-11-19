@@ -1,0 +1,256 @@
+<svg width="640" height="640" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <!-- Top disc dark steel rim gradient -->
+      <linearGradient id="discRim" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#141312"/>
+        <stop offset="15%" stop-color="#3d3936"/>
+        <stop offset="35%" stop-color="#7a726d"/>
+        <stop offset="50%" stop-color="#a89f98"/>
+        <stop offset="65%" stop-color="#544e4a"/>
+        <stop offset="85%" stop-color="#2a2725"/>
+        <stop offset="100%" stop-color="#121110"/>
+      </linearGradient>
+
+      <!-- Top disc upper bevel specular -->
+      <linearGradient id="discTopBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#807872"/>
+        <stop offset="40%" stop-color="#403c39"/>
+        <stop offset="100%" stop-color="#181716"/>
+      </linearGradient>
+
+      <!-- Gold Plate Metallic Linear Gradient -->
+      <linearGradient id="goldPlate" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#5e380e"/>
+        <stop offset="10%" stop-color="#b0782a"/>
+        <stop offset="25%" stop-color="#f5cc76"/>
+        <stop offset="45%" stop-color="#fff2c2"/>
+        <stop offset="60%" stop-color="#e6b047"/>
+        <stop offset="80%" stop-color="#8a5317"/>
+        <stop offset="100%" stop-color="#3b2106"/>
+      </linearGradient>
+
+      <!-- Plate Rim 3D Bevel Gradient -->
+      <linearGradient id="plateRimBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#ffe399"/>
+        <stop offset="35%" stop-color="#d49b33"/>
+        <stop offset="70%" stop-color="#8c5814"/>
+        <stop offset="100%" stop-color="#422505"/>
+      </linearGradient>
+
+      <!-- Central Column Stainless Steel Gradient -->
+      <linearGradient id="columnSteel" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#222426"/>
+        <stop offset="20%" stop-color="#60666b"/>
+        <stop offset="45%" stop-color="#d8e0e6"/>
+        <stop offset="60%" stop-color="#ffffff"/>
+        <stop offset="80%" stop-color="#717a82"/>
+        <stop offset="100%" stop-color="#202224"/>
+      </linearGradient>
+
+      <!-- Copper Coupling Ring Gradient -->
+      <linearGradient id="copperCoil" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#4d1f05"/>
+        <stop offset="15%" stop-color="#ad4e18"/>
+        <stop offset="40%" stop-color="#f79754"/>
+        <stop offset="55%" stop-color="#ffd2a8"/>
+        <stop offset="75%" stop-color="#c45d21"/>
+        <stop offset="100%" stop-color="#3d1502"/>
+      </linearGradient>
+
+      <!-- Wire Golden Gradient -->
+      <linearGradient id="goldWire" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#7a4b12"/>
+        <stop offset="40%" stop-color="#e8b456"/>
+        <stop offset="65%" stop-color="#fff0b8"/>
+        <stop offset="100%" stop-color="#8a5316"/>
+      </linearGradient>
+
+      <!-- Wire Outer Glow Filter -->
+      <filter id="wireGlow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="0.6" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+    
+      
+      <!-- Structural Support Rods (Background) -->
+      <rect x="228" y="152" width="6" height="414" fill="url(#columnSteel)" opacity="0.6"/>
+      <rect x="258" y="152" width="5" height="414" fill="url(#columnSteel)" opacity="0.5"/>
+      <rect x="377" y="152" width="5" height="414" fill="url(#columnSteel)" opacity="0.5"/>
+      <rect x="406" y="152" width="6" height="414" fill="url(#columnSteel)" opacity="0.6"/>
+    
+      <path d="M 182.00 152.00 C 172.00 190.00, 162.00 232.00, 154.00 264.00 C 172.00 306.00, 126.00 340.00, 138.00 380.00 C 154.00 422.00, 116.00 454.00, 128.00 494.00 C 122.00 520.00, 170.00 542.00, 178.00 566.00 L 178.00 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 189.87 152.00 C 179.87 190.00, 170.62 232.00, 162.62 264.00 C 180.62 306.00, 135.23 340.00, 147.23 380.00 C 163.23 422.00, 125.69 454.00, 137.69 494.00 C 131.69 520.00, 176.94 542.00, 184.94 566.00 L 184.94 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 197.80 152.00 C 187.80 190.00, 179.30 232.00, 171.30 264.00 C 189.30 306.00, 144.54 340.00, 156.54 380.00 C 172.54 422.00, 135.46 454.00, 147.46 494.00 C 141.46 520.00, 183.96 542.00, 191.96 566.00 L 191.96 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 205.80 152.00 C 195.80 190.00, 188.05 232.00, 180.05 264.00 C 198.05 306.00, 153.94 340.00, 165.94 380.00 C 181.94 422.00, 145.32 454.00, 157.32 494.00 C 151.32 520.00, 191.05 542.00, 199.05 566.00 L 199.05 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 213.88 152.00 C 203.88 190.00, 196.87 232.00, 188.87 264.00 C 206.87 306.00, 163.42 340.00, 175.42 380.00 C 191.42 422.00, 155.27 454.00, 167.27 494.00 C 161.27 520.00, 198.24 542.00, 206.24 566.00 L 206.24 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 222.04 152.00 C 212.04 190.00, 205.76 232.00, 197.76 264.00 C 215.76 306.00, 173.01 340.00, 185.01 380.00 C 201.01 422.00, 165.33 454.00, 177.33 494.00 C 171.33 520.00, 205.51 542.00, 213.51 566.00 L 213.51 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 230.30 152.00 C 220.30 190.00, 214.74 232.00, 206.74 264.00 C 224.74 306.00, 182.70 340.00, 194.70 380.00 C 210.70 422.00, 175.50 454.00, 187.50 494.00 C 181.50 520.00, 212.89 542.00, 220.89 566.00 L 220.89 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 238.67 152.00 C 228.67 190.00, 223.81 232.00, 215.81 264.00 C 233.81 306.00, 192.52 340.00, 204.52 380.00 C 220.52 422.00, 185.81 454.00, 197.81 494.00 C 191.81 520.00, 220.39 542.00, 228.39 566.00 L 228.39 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 247.15 152.00 C 237.15 190.00, 233.00 232.00, 225.00 264.00 C 243.00 306.00, 202.48 340.00, 214.48 380.00 C 230.48 422.00, 196.25 454.00, 208.25 494.00 C 202.25 520.00, 228.02 542.00, 236.02 566.00 L 236.02 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 255.77 152.00 C 245.77 190.00, 242.30 232.00, 234.30 264.00 C 252.30 306.00, 212.60 340.00, 224.60 380.00 C 240.60 422.00, 206.87 454.00, 218.87 494.00 C 212.87 520.00, 235.80 542.00, 243.80 566.00 L 243.80 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 264.55 152.00 C 254.55 190.00, 251.75 232.00, 243.75 264.00 C 261.75 306.00, 222.91 340.00, 234.91 380.00 C 250.91 422.00, 217.69 454.00, 229.69 494.00 C 223.69 520.00, 243.77 542.00, 251.77 566.00 L 251.77 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 273.53 152.00 C 263.53 190.00, 261.38 232.00, 253.38 264.00 C 271.38 306.00, 233.44 340.00, 245.44 380.00 C 261.44 422.00, 228.75 454.00, 240.75 494.00 C 234.75 520.00, 251.96 542.00, 259.96 566.00 L 259.96 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 282.75 152.00 C 272.75 190.00, 271.22 232.00, 263.22 264.00 C 281.22 306.00, 244.27 340.00, 256.27 380.00 C 272.27 422.00, 240.11 454.00, 252.11 494.00 C 246.11 520.00, 260.43 542.00, 268.43 566.00 L 268.43 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 292.29 152.00 C 282.29 190.00, 281.35 232.00, 273.35 264.00 C 291.35 306.00, 255.48 340.00, 267.48 380.00 C 283.48 422.00, 251.87 454.00, 263.87 494.00 C 257.87 520.00, 269.28 542.00, 277.28 566.00 L 277.28 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 302.33 152.00 C 292.33 190.00, 291.91 232.00, 283.91 264.00 C 301.91 306.00, 267.25 340.00, 279.25 380.00 C 295.25 422.00, 264.23 454.00, 276.23 494.00 C 270.23 520.00, 278.69 542.00, 286.69 566.00 L 286.69 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 313.28 152.00 C 303.28 190.00, 303.27 232.00, 295.27 264.00 C 313.27 306.00, 280.11 340.00, 292.11 380.00 C 308.11 422.00, 277.72 454.00, 289.72 494.00 C 283.72 520.00, 289.20 542.00, 297.20 566.00 L 297.20 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 326.72 152.00 C 336.72 190.00, 336.73 232.00, 344.73 264.00 C 326.73 306.00, 359.89 340.00, 347.89 380.00 C 331.89 422.00, 362.28 454.00, 350.28 494.00 C 356.28 520.00, 350.80 542.00, 342.80 566.00 L 342.80 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 337.67 152.00 C 347.67 190.00, 348.09 232.00, 356.09 264.00 C 338.09 306.00, 372.75 340.00, 360.75 380.00 C 344.75 422.00, 375.77 454.00, 363.77 494.00 C 369.77 520.00, 361.31 542.00, 353.31 566.00 L 353.31 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 347.71 152.00 C 357.71 190.00, 358.65 232.00, 366.65 264.00 C 348.65 306.00, 384.52 340.00, 372.52 380.00 C 356.52 422.00, 388.13 454.00, 376.13 494.00 C 382.13 520.00, 370.72 542.00, 362.72 566.00 L 362.72 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 357.25 152.00 C 367.25 190.00, 368.78 232.00, 376.78 264.00 C 358.78 306.00, 395.73 340.00, 383.73 380.00 C 367.73 422.00, 399.89 454.00, 387.89 494.00 C 393.89 520.00, 379.57 542.00, 371.57 566.00 L 371.57 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 366.47 152.00 C 376.47 190.00, 378.62 232.00, 386.62 264.00 C 368.62 306.00, 406.56 340.00, 394.56 380.00 C 378.56 422.00, 411.25 454.00, 399.25 494.00 C 405.25 520.00, 388.04 542.00, 380.04 566.00 L 380.04 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 375.45 152.00 C 385.45 190.00, 388.25 232.00, 396.25 264.00 C 378.25 306.00, 417.09 340.00, 405.09 380.00 C 389.09 422.00, 422.31 454.00, 410.31 494.00 C 416.31 520.00, 396.23 542.00, 388.23 566.00 L 388.23 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.85" filter="url(#wireGlow)"/>
+    <path d="M 384.23 152.00 C 394.23 190.00, 397.70 232.00, 405.70 264.00 C 387.70 306.00, 427.40 340.00, 415.40 380.00 C 399.40 422.00, 433.13 454.00, 421.13 494.00 C 427.13 520.00, 404.20 542.00, 396.20 566.00 L 396.20 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 392.85 152.00 C 402.85 190.00, 407.00 232.00, 415.00 264.00 C 397.00 306.00, 437.52 340.00, 425.52 380.00 C 409.52 422.00, 443.75 454.00, 431.75 494.00 C 437.75 520.00, 411.98 542.00, 403.98 566.00 L 403.98 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 401.33 152.00 C 411.33 190.00, 416.19 232.00, 424.19 264.00 C 406.19 306.00, 447.48 340.00, 435.48 380.00 C 419.48 422.00, 454.19 454.00, 442.19 494.00 C 448.19 520.00, 419.61 542.00, 411.61 566.00 L 411.61 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 409.70 152.00 C 419.70 190.00, 425.26 232.00, 433.26 264.00 C 415.26 306.00, 457.30 340.00, 445.30 380.00 C 429.30 422.00, 464.50 454.00, 452.50 494.00 C 458.50 520.00, 427.11 542.00, 419.11 566.00 L 419.11 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 417.96 152.00 C 427.96 190.00, 434.24 232.00, 442.24 264.00 C 424.24 306.00, 466.99 340.00, 454.99 380.00 C 438.99 422.00, 474.67 454.00, 462.67 494.00 C 468.67 520.00, 434.49 542.00, 426.49 566.00 L 426.49 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 426.12 152.00 C 436.12 190.00, 443.13 232.00, 451.13 264.00 C 433.13 306.00, 476.58 340.00, 464.58 380.00 C 448.58 422.00, 484.73 454.00, 472.73 494.00 C 478.73 520.00, 441.76 542.00, 433.76 566.00 L 433.76 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 434.20 152.00 C 444.20 190.00, 451.95 232.00, 459.95 264.00 C 441.95 306.00, 486.06 340.00, 474.06 380.00 C 458.06 422.00, 494.68 454.00, 482.68 494.00 C 488.68 520.00, 448.95 542.00, 440.95 566.00 L 440.95 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 442.20 152.00 C 452.20 190.00, 460.70 232.00, 468.70 264.00 C 450.70 306.00, 495.46 340.00, 483.46 380.00 C 467.46 422.00, 504.54 454.00, 492.54 494.00 C 498.54 520.00, 456.04 542.00, 448.04 566.00 L 448.04 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 450.13 152.00 C 460.13 190.00, 469.38 232.00, 477.38 264.00 C 459.38 306.00, 504.77 340.00, 492.77 380.00 C 476.77 422.00, 514.31 454.00, 502.31 494.00 C 508.31 520.00, 463.06 542.00, 455.06 566.00 L 455.06 588.00" stroke="url(#goldWire)" stroke-width="1.2" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+    <path d="M 458.00 152.00 C 468.00 190.00, 478.00 232.00, 486.00 264.00 C 468.00 306.00, 514.00 340.00, 502.00 380.00 C 486.00 422.00, 524.00 454.00, 512.00 494.00 C 518.00 520.00, 470.00 542.00, 462.00 566.00 L 462.00 588.00" stroke="url(#goldWire)" stroke-width="1.5" fill="none" opacity="0.92" filter="url(#wireGlow)"/>
+      
+      <!-- Structural Support Rods (Foreground) -->
+      <rect x="238" y="152" width="8" height="414" fill="url(#columnSteel)" rx="2"/>
+      <rect x="394" y="152" width="8" height="414" fill="url(#columnSteel)" rx="2"/>
+    
+      
+        <!-- Central Column Segments -->
+        <g id="centralColumn">
+          <!-- Column Segment 1 (Top to Plate 1) -->
+          <rect x="306" y="150" width="28" height="114" fill="url(#columnSteel)"/>
+          <!-- Copper Coupling Coil 1 (Stage 1 Qubit) -->
+          <g id="coil1">
+            <rect x="302" y="192" width="36" height="34" rx="4" fill="url(#copperCoil)"/>
+            <ellipse cx="320" cy="196" rx="18" ry="4" fill="#ffd2a8" opacity="0.8"/>
+            <ellipse cx="320" cy="204" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="212" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="220" rx="18" ry="4" fill="#3d1502" opacity="0.9"/>
+          </g>
+
+          <!-- Column Segment 2 (Plate 1 to Plate 2) -->
+          <rect x="306" y="270" width="28" height="110" fill="url(#columnSteel)"/>
+          <!-- Copper Coupling Coil 2 (Stage 2 Qubit) -->
+          <g id="coil2">
+            <rect x="302" y="308" width="36" height="34" rx="4" fill="url(#copperCoil)"/>
+            <ellipse cx="320" cy="312" rx="18" ry="4" fill="#ffd2a8" opacity="0.8"/>
+            <ellipse cx="320" cy="320" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="328" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="336" rx="18" ry="4" fill="#3d1502" opacity="0.9"/>
+          </g>
+
+          <!-- Column Segment 3 (Plate 2 to Plate 3) -->
+          <rect x="306" y="386" width="28" height="108" fill="url(#columnSteel)"/>
+          <!-- Copper Coupling Coil 3 (Stage 3 Qubit) -->
+          <g id="coil3">
+            <rect x="302" y="424" width="36" height="34" rx="4" fill="url(#copperCoil)"/>
+            <ellipse cx="320" cy="428" rx="18" ry="4" fill="#ffd2a8" opacity="0.8"/>
+            <ellipse cx="320" cy="436" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="444" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="452" rx="18" ry="4" fill="#3d1502" opacity="0.9"/>
+          </g>
+
+          <!-- Column Segment 4 (Plate 3 to Bottom Plate) -->
+          <rect x="304" y="500" width="32" height="66" fill="url(#columnSteel)"/>
+        </g>
+        
+      
+        <!-- Plate 1 (Upper Plate) -->
+        <g id="plate1">
+          <!-- Plate 1 Body & Rim -->
+          <path d="M 85 264 C 85 250, 555 250, 555 264 L 555 272 C 555 286, 85 286, 85 272 Z" fill="url(#plateRimBevel)"/>
+          <ellipse cx="320" cy="263" rx="235" ry="20" fill="url(#goldPlate)"/>
+          <!-- Highlight edge -->
+          <path d="M 90 268 C 160 282, 480 282, 550 268" stroke="#fff2c2" stroke-width="1.5" fill="none" opacity="0.8"/>
+          <!-- Perimeter bolt pattern -->
+          <circle cx="130" cy="266" r="2.5" fill="#ffe399"/>
+          <circle cx="180" cy="272" r="2.5" fill="#ffe399"/>
+          <circle cx="250" cy="276" r="2.5" fill="#ffe399"/>
+          <circle cx="390" cy="276" r="2.5" fill="#ffe399"/>
+          <circle cx="460" cy="272" r="2.5" fill="#ffe399"/>
+          <circle cx="510" cy="266" r="2.5" fill="#ffe399"/>
+        </g>
+
+        <!-- Plate 2 (Middle Plate) -->
+        <g id="plate2">
+          <!-- Plate 2 Body & Rim -->
+          <path d="M 80 380 C 80 366, 560 366, 560 380 L 560 390 C 560 404, 80 404, 80 390 Z" fill="url(#plateRimBevel)"/>
+          <ellipse cx="320" cy="379" rx="240" ry="21" fill="url(#goldPlate)"/>
+          <!-- Highlight edge -->
+          <path d="M 85 384 C 155 400, 485 400, 555 384" stroke="#fff2c2" stroke-width="1.6" fill="none" opacity="0.85"/>
+          <!-- Perimeter bolts -->
+          <circle cx="120" cy="382" r="2.5" fill="#ffe399"/>
+          <circle cx="170" cy="389" r="2.5" fill="#ffe399"/>
+          <circle cx="240" cy="393" r="2.5" fill="#ffe399"/>
+          <circle cx="400" cy="393" r="2.5" fill="#ffe399"/>
+          <circle cx="470" cy="389" r="2.5" fill="#ffe399"/>
+          <circle cx="520" cy="382" r="2.5" fill="#ffe399"/>
+        </g>
+
+        <!-- Plate 3 (Lower Plate) -->
+        <g id="plate3">
+          <!-- Plate 3 Body & Rim -->
+          <path d="M 75 494 C 75 480, 565 480, 565 494 L 565 506 C 565 520, 75 520, 75 506 Z" fill="url(#plateRimBevel)"/>
+          <ellipse cx="320" cy="493" rx="245" ry="22" fill="url(#goldPlate)"/>
+          <!-- Highlight edge -->
+          <path d="M 80 499 C 150 516, 490 516, 560 499" stroke="#fff2c2" stroke-width="1.8" fill="none" opacity="0.85"/>
+          <!-- Perimeter bolts -->
+          <circle cx="115" cy="497" r="2.5" fill="#ffe399"/>
+          <circle cx="165" cy="505" r="2.5" fill="#ffe399"/>
+          <circle cx="235" cy="510" r="2.5" fill="#ffe399"/>
+          <circle cx="405" cy="510" r="2.5" fill="#ffe399"/>
+          <circle cx="475" cy="505" r="2.5" fill="#ffe399"/>
+          <circle cx="525" cy="497" r="2.5" fill="#ffe399"/>
+        </g>
+
+        <!-- Complete Bottom Plate -->
+        <g id="bottomPlate">
+          <!-- Bottom Plate Rim & Flange -->
+          <path d="M 90 566 C 90 552, 550 552, 550 566 L 550 578 C 550 592, 90 592, 90 578 Z" fill="url(#plateRimBevel)"/>
+          <ellipse cx="320" cy="565" rx="230" ry="19" fill="url(#goldPlate)"/>
+          <path d="M 95 572 C 165 586, 475 586, 545 572" stroke="#fff2c2" stroke-width="1.5" fill="none" opacity="0.8"/>
+          <!-- Exit Connector Pins (underneath bottom plate) -->
+          <g id="exitPins" stroke="#ffd2a8" stroke-width="1.6" opacity="0.9">
+            <line x1="180" y1="578" x2="180" y2="594"/>
+            <line x1="210" y1="581" x2="210" y2="595"/>
+            <line x1="240" y1="583" x2="240" y2="596"/>
+            <line x1="270" y1="585" x2="270" y2="596"/>
+            <line x1="300" y1="586" x2="300" y2="596"/>
+            <line x1="320" y1="586" x2="320" y2="596"/>
+            <line x1="340" y1="586" x2="340" y2="596"/>
+            <line x1="370" y1="585" x2="370" y2="596"/>
+            <line x1="400" y1="583" x2="400" y2="596"/>
+            <line x1="430" y1="581" x2="430" y2="595"/>
+            <line x1="460" y1="578" x2="460" y2="594"/>
+          </g>
+        </g>
+        
+      
+        <!-- Complete Top Disc Assembly -->
+        <g id="topDisc">
+          <!-- Upper Disc Cap (Brushed steel bevel) -->
+          <path d="M 40 76 C 40 46, 600 46, 600 76 L 600 98 C 600 128, 40 128, 40 98 Z" fill="url(#discRim)"/>
+          <ellipse cx="320" cy="68" rx="278" ry="32" fill="url(#discTopBevel)"/>
+          <!-- Rim Specular Highlight Line -->
+          <path d="M 50 82 C 120 102, 520 102, 590 82" stroke="#ffffff" stroke-width="1.8" fill="none" opacity="0.75"/>
+          <!-- Underside Recessed Gold Ring -->
+          <ellipse cx="320" cy="116" rx="245" ry="24" fill="url(#goldPlate)"/>
+          <ellipse cx="320" cy="120" rx="235" ry="21" fill="url(#plateRimBevel)"/>
+          <!-- Cable Entry Collar Flange -->
+          <ellipse cx="320" cy="144" rx="180" ry="16" fill="url(#goldPlate)"/>
+          <ellipse cx="320" cy="146" rx="172" ry="14" fill="#3b2106"/>
+          <!-- Perimeter Bolt Circles on underside -->
+          <circle cx="160" cy="120" r="3" fill="#ffe399"/>
+          <circle cx="220" cy="128" r="3" fill="#ffe399"/>
+          <circle cx="320" cy="132" r="3" fill="#ffe399"/>
+          <circle cx="420" cy="128" r="3" fill="#ffe399"/>
+          <circle cx="480" cy="120" r="3" fill="#ffe399"/>
+        </g>
+        
+    </svg>

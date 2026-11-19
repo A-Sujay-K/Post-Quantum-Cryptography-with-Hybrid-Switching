@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-20T17:24:28.643Z",
+  "timestamp": "2026-11-20T19:22:02.436Z",
   "pathGate": "GREEN",
   "fps": {
     "fps": 61,
@@ -43,19 +43,19 @@
   "captures": {
     "home-360-dark": {
       "file": "final-qc-home-360-dark.png",
-      "bytes": 328472
+      "bytes": 299474
     },
     "awareness-360-dark": {
       "file": "final-qc-awareness-360-dark.png",
-      "bytes": 318364
+      "bytes": 318365
     },
     "access-360-dark": {
       "file": "final-qc-access-360-dark.png",
-      "bytes": 182842
+      "bytes": 182841
     },
     "home-768-dark": {
       "file": "final-qc-home-768-dark.png",
-      "bytes": 722392
+      "bytes": 677143
     },
     "awareness-768-dark": {
       "file": "final-qc-awareness-768-dark.png",
@@ -67,7 +67,7 @@
     },
     "home-1280-dark": {
       "file": "final-qc-home-1280-dark.png",
-      "bytes": 1047508
+      "bytes": 976746
     },
     "awareness-1280-dark": {
       "file": "final-qc-awareness-1280-dark.png",
@@ -79,19 +79,19 @@
     },
     "home-1920-dark": {
       "file": "final-qc-home-1920-dark.png",
-      "bytes": 1708523
+      "bytes": 1623724
     },
     "awareness-1920-dark": {
       "file": "final-qc-awareness-1920-dark.png",
-      "bytes": 1582486
+      "bytes": 1582483
     },
     "access-1920-dark": {
       "file": "final-qc-access-1920-dark.png",
-      "bytes": 1395773
+      "bytes": 1395896
     },
     "home-360-light": {
       "file": "final-qc-home-360-light.png",
-      "bytes": 244169
+      "bytes": 208096
     },
     "awareness-360-light": {
       "file": "final-qc-awareness-360-light.png",
@@ -103,7 +103,7 @@
     },
     "home-768-light": {
       "file": "final-qc-home-768-light.png",
-      "bytes": 480353
+      "bytes": 417989
     },
     "awareness-768-light": {
       "file": "final-qc-awareness-768-light.png",
@@ -115,7 +115,7 @@
     },
     "home-1280-light": {
       "file": "final-qc-home-1280-light.png",
-      "bytes": 745585
+      "bytes": 649775
     },
     "awareness-1280-light": {
       "file": "final-qc-awareness-1280-light.png",
@@ -127,11 +127,11 @@
     },
     "home-1920-light": {
       "file": "final-qc-home-1920-light.png",
-      "bytes": 1075664
+      "bytes": 976127
     },
     "awareness-1920-light": {
       "file": "final-qc-awareness-1920-light.png",
-      "bytes": 944993
+      "bytes": 944990
     },
     "access-1920-light": {
       "file": "final-qc-access-1920-light.png",

@@ -1,0 +1,217 @@
+<svg width="640" height="640" viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg">
+      
+    <defs>
+      <!-- Top disc dark steel rim gradient -->
+      <linearGradient id="discRim" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#141312"/>
+        <stop offset="15%" stop-color="#3d3936"/>
+        <stop offset="35%" stop-color="#7a726d"/>
+        <stop offset="50%" stop-color="#a89f98"/>
+        <stop offset="65%" stop-color="#544e4a"/>
+        <stop offset="85%" stop-color="#2a2725"/>
+        <stop offset="100%" stop-color="#121110"/>
+      </linearGradient>
+
+      <!-- Top disc upper bevel specular -->
+      <linearGradient id="discTopBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#807872"/>
+        <stop offset="40%" stop-color="#403c39"/>
+        <stop offset="100%" stop-color="#181716"/>
+      </linearGradient>
+
+      <!-- Gold Plate Metallic Linear Gradient -->
+      <linearGradient id="goldPlate" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#5e380e"/>
+        <stop offset="10%" stop-color="#b0782a"/>
+        <stop offset="25%" stop-color="#f5cc76"/>
+        <stop offset="45%" stop-color="#fff2c2"/>
+        <stop offset="60%" stop-color="#e6b047"/>
+        <stop offset="80%" stop-color="#8a5317"/>
+        <stop offset="100%" stop-color="#3b2106"/>
+      </linearGradient>
+
+      <!-- Plate Rim 3D Bevel Gradient -->
+      <linearGradient id="plateRimBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#ffe399"/>
+        <stop offset="35%" stop-color="#d49b33"/>
+        <stop offset="70%" stop-color="#8c5814"/>
+        <stop offset="100%" stop-color="#422505"/>
+      </linearGradient>
+
+      <!-- Central Column Stainless Steel Gradient -->
+      <linearGradient id="columnSteel" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#222426"/>
+        <stop offset="20%" stop-color="#60666b"/>
+        <stop offset="45%" stop-color="#d8e0e6"/>
+        <stop offset="60%" stop-color="#ffffff"/>
+        <stop offset="80%" stop-color="#717a82"/>
+        <stop offset="100%" stop-color="#202224"/>
+      </linearGradient>
+
+      <!-- Copper Coupling Ring Gradient -->
+      <linearGradient id="copperCoil" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#4d1f05"/>
+        <stop offset="15%" stop-color="#ad4e18"/>
+        <stop offset="40%" stop-color="#f79754"/>
+        <stop offset="55%" stop-color="#ffd2a8"/>
+        <stop offset="75%" stop-color="#c45d21"/>
+        <stop offset="100%" stop-color="#3d1502"/>
+      </linearGradient>
+
+      <!-- Wire Golden Gradient -->
+      <linearGradient id="goldWire" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#7a4b12"/>
+        <stop offset="40%" stop-color="#e8b456"/>
+        <stop offset="65%" stop-color="#fff0b8"/>
+        <stop offset="100%" stop-color="#8a5316"/>
+      </linearGradient>
+
+      <!-- Wire Outer Glow Filter -->
+      <filter id="wireGlow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="0.6" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+    
+      
+      <!-- Structural Support Rods (Foreground) -->
+      <rect x="238" y="152" width="8" height="414" fill="url(#columnSteel)" rx="2"/>
+      <rect x="394" y="152" width="8" height="414" fill="url(#columnSteel)" rx="2"/>
+    
+      
+        <!-- Central Column Segments -->
+        <g id="centralColumn">
+          <!-- Column Segment 1 (Top to Plate 1) -->
+          <rect x="306" y="150" width="28" height="114" fill="url(#columnSteel)"/>
+          <!-- Copper Coupling Coil 1 (Stage 1 Qubit) -->
+          <g id="coil1">
+            <rect x="302" y="192" width="36" height="34" rx="4" fill="url(#copperCoil)"/>
+            <ellipse cx="320" cy="196" rx="18" ry="4" fill="#ffd2a8" opacity="0.8"/>
+            <ellipse cx="320" cy="204" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="212" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="220" rx="18" ry="4" fill="#3d1502" opacity="0.9"/>
+          </g>
+
+          <!-- Column Segment 2 (Plate 1 to Plate 2) -->
+          <rect x="306" y="270" width="28" height="110" fill="url(#columnSteel)"/>
+          <!-- Copper Coupling Coil 2 (Stage 2 Qubit) -->
+          <g id="coil2">
+            <rect x="302" y="308" width="36" height="34" rx="4" fill="url(#copperCoil)"/>
+            <ellipse cx="320" cy="312" rx="18" ry="4" fill="#ffd2a8" opacity="0.8"/>
+            <ellipse cx="320" cy="320" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="328" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="336" rx="18" ry="4" fill="#3d1502" opacity="0.9"/>
+          </g>
+
+          <!-- Column Segment 3 (Plate 2 to Plate 3) -->
+          <rect x="306" y="386" width="28" height="108" fill="url(#columnSteel)"/>
+          <!-- Copper Coupling Coil 3 (Stage 3 Qubit) -->
+          <g id="coil3">
+            <rect x="302" y="424" width="36" height="34" rx="4" fill="url(#copperCoil)"/>
+            <ellipse cx="320" cy="428" rx="18" ry="4" fill="#ffd2a8" opacity="0.8"/>
+            <ellipse cx="320" cy="436" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="444" rx="18" ry="4" fill="#ffd2a8" opacity="0.6"/>
+            <ellipse cx="320" cy="452" rx="18" ry="4" fill="#3d1502" opacity="0.9"/>
+          </g>
+
+          <!-- Column Segment 4 (Plate 3 to Bottom Plate) -->
+          <rect x="304" y="500" width="32" height="66" fill="url(#columnSteel)"/>
+        </g>
+        
+      
+        <!-- Plate 1 (Upper Plate) -->
+        <g id="plate1">
+          <!-- Plate 1 Body & Rim -->
+          <path d="M 85 264 C 85 250, 555 250, 555 264 L 555 272 C 555 286, 85 286, 85 272 Z" fill="url(#plateRimBevel)"/>
+          <ellipse cx="320" cy="263" rx="235" ry="20" fill="url(#goldPlate)"/>
+          <!-- Highlight edge -->
+          <path d="M 90 268 C 160 282, 480 282, 550 268" stroke="#fff2c2" stroke-width="1.5" fill="none" opacity="0.8"/>
+          <!-- Perimeter bolt pattern -->
+          <circle cx="130" cy="266" r="2.5" fill="#ffe399"/>
+          <circle cx="180" cy="272" r="2.5" fill="#ffe399"/>
+          <circle cx="250" cy="276" r="2.5" fill="#ffe399"/>
+          <circle cx="390" cy="276" r="2.5" fill="#ffe399"/>
+          <circle cx="460" cy="272" r="2.5" fill="#ffe399"/>
+          <circle cx="510" cy="266" r="2.5" fill="#ffe399"/>
+        </g>
+
+        <!-- Plate 2 (Middle Plate) -->
+        <g id="plate2">
+          <!-- Plate 2 Body & Rim -->
+          <path d="M 80 380 C 80 366, 560 366, 560 380 L 560 390 C 560 404, 80 404, 80 390 Z" fill="url(#plateRimBevel)"/>
+          <ellipse cx="320" cy="379" rx="240" ry="21" fill="url(#goldPlate)"/>
+          <!-- Highlight edge -->
+          <path d="M 85 384 C 155 400, 485 400, 555 384" stroke="#fff2c2" stroke-width="1.6" fill="none" opacity="0.85"/>
+          <!-- Perimeter bolts -->
+          <circle cx="120" cy="382" r="2.5" fill="#ffe399"/>
+          <circle cx="170" cy="389" r="2.5" fill="#ffe399"/>
+          <circle cx="240" cy="393" r="2.5" fill="#ffe399"/>
+          <circle cx="400" cy="393" r="2.5" fill="#ffe399"/>
+          <circle cx="470" cy="389" r="2.5" fill="#ffe399"/>
+          <circle cx="520" cy="382" r="2.5" fill="#ffe399"/>
+        </g>
+
+        <!-- Plate 3 (Lower Plate) -->
+        <g id="plate3">
+          <!-- Plate 3 Body & Rim -->
+          <path d="M 75 494 C 75 480, 565 480, 565 494 L 565 506 C 565 520, 75 520, 75 506 Z" fill="url(#plateRimBevel)"/>
+          <ellipse cx="320" cy="493" rx="245" ry="22" fill="url(#goldPlate)"/>
+          <!-- Highlight edge -->
+          <path d="M 80 499 C 150 516, 490 516, 560 499" stroke="#fff2c2" stroke-width="1.8" fill="none" opacity="0.85"/>
+          <!-- Perimeter bolts -->
+          <circle cx="115" cy="497" r="2.5" fill="#ffe399"/>
+          <circle cx="165" cy="505" r="2.5" fill="#ffe399"/>
+          <circle cx="235" cy="510" r="2.5" fill="#ffe399"/>
+          <circle cx="405" cy="510" r="2.5" fill="#ffe399"/>
+          <circle cx="475" cy="505" r="2.5" fill="#ffe399"/>
+          <circle cx="525" cy="497" r="2.5" fill="#ffe399"/>
+        </g>
+
+        <!-- Complete Bottom Plate -->
+        <g id="bottomPlate">
+          <!-- Bottom Plate Rim & Flange -->
+          <path d="M 90 566 C 90 552, 550 552, 550 566 L 550 578 C 550 592, 90 592, 90 578 Z" fill="url(#plateRimBevel)"/>
+          <ellipse cx="320" cy="565" rx="230" ry="19" fill="url(#goldPlate)"/>
+          <path d="M 95 572 C 165 586, 475 586, 545 572" stroke="#fff2c2" stroke-width="1.5" fill="none" opacity="0.8"/>
+          <!-- Exit Connector Pins (underneath bottom plate) -->
+          <g id="exitPins" stroke="#ffd2a8" stroke-width="1.6" opacity="0.9">
+            <line x1="180" y1="578" x2="180" y2="594"/>
+            <line x1="210" y1="581" x2="210" y2="595"/>
+            <line x1="240" y1="583" x2="240" y2="596"/>
+            <line x1="270" y1="585" x2="270" y2="596"/>
+            <line x1="300" y1="586" x2="300" y2="596"/>
+            <line x1="320" y1="586" x2="320" y2="596"/>
+            <line x1="340" y1="586" x2="340" y2="596"/>
+            <line x1="370" y1="585" x2="370" y2="596"/>
+            <line x1="400" y1="583" x2="400" y2="596"/>
+            <line x1="430" y1="581" x2="430" y2="595"/>
+            <line x1="460" y1="578" x2="460" y2="594"/>
+          </g>
+        </g>
+        
+      
+        <!-- Complete Top Disc Assembly -->
+        <g id="topDisc">
+          <!-- Upper Disc Cap (Brushed steel bevel) -->
+          <path d="M 40 76 C 40 46, 600 46, 600 76 L 600 98 C 600 128, 40 128, 40 98 Z" fill="url(#discRim)"/>
+          <ellipse cx="320" cy="68" rx="278" ry="32" fill="url(#discTopBevel)"/>
+          <!-- Rim Specular Highlight Line -->
+          <path d="M 50 82 C 120 102, 520 102, 590 82" stroke="#ffffff" stroke-width="1.8" fill="none" opacity="0.75"/>
+          <!-- Underside Recessed Gold Ring -->
+          <ellipse cx="320" cy="116" rx="245" ry="24" fill="url(#goldPlate)"/>
+          <ellipse cx="320" cy="120" rx="235" ry="21" fill="url(#plateRimBevel)"/>
+          <!-- Cable Entry Collar Flange -->
+          <ellipse cx="320" cy="144" rx="180" ry="16" fill="url(#goldPlate)"/>
+          <ellipse cx="320" cy="146" rx="172" ry="14" fill="#3b2106"/>
+          <!-- Perimeter Bolt Circles on underside -->
+          <circle cx="160" cy="120" r="3" fill="#ffe399"/>
+          <circle cx="220" cy="128" r="3" fill="#ffe399"/>
+          <circle cx="320" cy="132" r="3" fill="#ffe399"/>
+          <circle cx="420" cy="128" r="3" fill="#ffe399"/>
+          <circle cx="480" cy="120" r="3" fill="#ffe399"/>
+        </g>
+        
+    </svg>
