@@ -175,15 +175,15 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Line 4: Dynamic Switching — Standard for Digital Security (Stagger 3) */}
+            {/* Line 4: Dynamic Switching (Stagger 3) - Hover reveals: A NEW STANDARD FOR DIGITAL SECURITY. */}
             <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-6 sm:pl-12 md:pl-16 lg:pl-20 text-[var(--text-primary)] group cursor-pointer">
               <span className="text-[var(--text-tertiary)] mr-2">/</span>
               <ScrambleText
-                text="HYBRIDE SWITCHING -> A NEW STANDARD FOR DIGITAL SECURITY."
-                hoverText={`Q_TL >= ${CRITICAL_THRESHOLD} -> CRITICAL LANE (AUTHENTICATED OTP)`}
+                text="HYBRIDE SWITCHING"
+                hoverText="A NEW STANDARD FOR DIGITAL SECURITY."
                 delay={950}
                 duration={500}
-                className="hover:text-[var(--text-primary)] underline decoration-[var(--edge-rest)] hover:decoration-[var(--col-standard)] transition-colors"
+                className="hover:text-[var(--text-primary)] underline decoration-[var(--edge-rest)] hover:decoration-[var(--col-standard)] transition-colors inline-block"
               />
             </div>
           </div>
