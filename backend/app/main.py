@@ -77,6 +77,9 @@ async def lifespan(app: FastAPI):
     logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
     logger.info("Starting PQC Secure Comm API...")
     
+    if settings.JWT_SECRET == "change-me-to-a-random-secret-key-in-production":
+        logger.warning("SECURITY ALERT: Using default development JWT_SECRET. In production, set a secure JWT_SECRET via environment!")
+    
     # Init databases
     await init_mongodb(settings.MONGODB_URI, settings.MONGODB_DB_NAME)
     await init_redis(settings.REDIS_URI)

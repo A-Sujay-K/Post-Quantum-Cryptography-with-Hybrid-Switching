@@ -155,5 +155,14 @@ pqc-secure-comm/
 └── README.md
 ```
 
+## Limitations, Security Scope & Out of Scope
+
+> **Academic & Prototype Classification**: This project is an experimental prototype and simulation platform designed to study adaptive hybrid post-quantum cryptographic dispatch and key-pool throttling mechanisms. It is not an enterprise-certified E2EE consumer product.
+
+1. **Simulated vs. Physical QKD**: Quantum Key Distribution (QKD) in this codebase is simulated via a background software daemon generating cryptographically secure 256-bit symmetric entropy into a Redis key pool. It does not employ physical optical fibers, single-photon detectors, or quantum channels (BB84 / E91 / decoy state protocols). Consequently, it does not provide physical Information-Theoretic Security against fiber-tapping adversaries without simulated trust assumptions.
+2. **Server-Mediated Cryptographic Architecture**: Encryption lifecycle execution occurs server-side via the backend routing engine to enable threat analysis, priority queue buffering, and supervisor telemetry auditing. While all payloads undergo authentic ML-KEM-768 encapsulation, AES-256-GCM authenticated encryption, and ML-DSA-65 digital signatures, this is **not** an end-to-end zero-knowledge client architecture (the backend holds transient access to message context during evaluation).
+3. **PQC Cryptographic Acceleration**: When `liboqs` (Open Quantum Safe) shared libraries are compiled on the host system, native C-level ML-KEM-768 and ML-DSA-65 primitives execute. In headless or lightweight containers without `liboqs`, the system operates in calibrated simulation mode matching exact NIST FIPS 203/204 byte lengths and structural invariants.
+4. **Out of Scope**: Physical side-channel attacks (DPA/CPA) on host hardware, hardware security module (HSM) key isolation, and physical quantum repeater networks are out of scope.
+
 ## License
 MIT License

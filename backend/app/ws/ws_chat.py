@@ -64,13 +64,28 @@ async def websocket_chat_endpoint(websocket: WebSocket, token: str):
                         import base64
                         file_data = base64.b64decode(file_data_b64)
                         
+                        # Input handling: enforce maximum file upload limit (25MB default)
+                        from app.config import get_settings
+                        settings_cfg = get_settings()
+                        max_bytes = settings_cfg.MAX_FILE_SIZE_MB * 1024 * 1024
+                        if len(file_data) > max_bytes:
+                            await manager.send_to_user(user_id, {
+                                "type": "error",
+                                "payload": {"message": f"File exceeds maximum allowed size of {settings_cfg.MAX_FILE_SIZE_MB}MB"}
+                            })
+                            continue
+                        
                     # Store file if present
                     file_url = None
                     file_size = None
                     if file_data and filename:
                         from app.services.file_storage import save_file
-                        file_url = save_file(file_data, filename)
-                        file_size = len(file_data)
+                        try:
+                            file_url = save_file(file_data, filename)
+                            file_size = len(file_data)
+                        except ValueError as path_err:
+                            logger.warning(f"File upload rejected for path anomaly: {path_err}")
+                            continue
                         
                     # Process and route through threat analyzer + crypto engine
                     routing_result = await process_message(

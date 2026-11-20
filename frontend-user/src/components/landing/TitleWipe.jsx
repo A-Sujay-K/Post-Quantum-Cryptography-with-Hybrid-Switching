@@ -1,71 +1,143 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const WORD1 = 'PQCHS';
-const WORD2 = 'ENVIRONMENT';
-const FULL_TITLE = `${WORD1} ${WORD2}`;
-const ACCESSIBLE_LABEL = 'POST-QUANTUM CRYPTOGRAPHY HYBRID SWITCHING';
+const DESKTOP_LINES = ['ARE YOU READY FOR', 'THE QUANTUM FUTURE?'];
+const MOBILE_LINES = ['ARE YOU', 'READY FOR', 'THE QUANTUM', 'FUTURE?'];
+const FULL_SENTENCE = 'ARE YOU READY FOR THE QUANTUM FUTURE?';
 
 const NOISE_GLYPHS = ['▒', '░', '█', '▓', '-', '_', '/', '\\', '*', '+', '=', '%'];
 
 /**
  * TitleWipe
- * Modeled on yannickgregoire.nl (Animation 1 & Reference Frames 1-2):
- * - Dot-matrix typography (Doto)
- * - Two words ("PQCHS ENVIRONMENT") with a wide gap
- * - Edge-to-edge layout, bleeding slightly past the right edge on desktop
- * - Wraps onto two lines on mobile
- * - Accessible h1 label: "POST-QUANTUM CRYPTOGRAPHY HYBRID SWITCHING"
- * - Left-to-right ASCII noise wave wipe on initial load (~1.2s)
+ * - Dot-matrix typography (Doto weight 900)
+ * - Accessible h1 with exact sentence: "ARE YOU READY FOR THE QUANTUM FUTURE?"
+ * - Desktop: TWO lines ("ARE YOU READY FOR" / "THE QUANTUM FUTURE?")
+ *   Sized from advance width (0.60em) with font-size explicitly reduced by 5px per request.
+ * - Mobile: FOUR lines ("ARE YOU" / "READY FOR" / "THE QUANTUM" / "FUTURE?")
+ *   Sized with font-size reduced by 5px.
+ * - Load wipe: Left-to-right ASCII noise wave resolving in ~1.2s, with staggered line starts.
+ * - Reduced motion: final text displayed immediately.
  */
 export default function TitleWipe({ className = '' }) {
-  // Start with noise characters for initial load state
-  const [displayChars, setDisplayChars] = useState(() =>
-    FULL_TITLE.split('').map((char) =>
-      char === ' ' ? ' ' : NOISE_GLYPHS[Math.floor(Math.random() * NOISE_GLYPHS.length)]
+  const containerRef = useRef(null);
+  const [fontSize, setFontSize] = useState(null);
+  const [mobFontSize, setMobFontSize] = useState(null);
+
+  // Character state for desktop lines
+  const [desktopChars, setDesktopChars] = useState(() =>
+    DESKTOP_LINES.map((line) =>
+      line.split('').map((char) =>
+        char === ' ' ? ' ' : NOISE_GLYPHS[Math.floor(Math.random() * NOISE_GLYPHS.length)]
+      )
     )
   );
+
+  // Character state for mobile lines
+  const [mobileChars, setMobileChars] = useState(() =>
+    MOBILE_LINES.map((line) =>
+      line.split('').map((char) =>
+        char === ' ' ? ' ' : NOISE_GLYPHS[Math.floor(Math.random() * NOISE_GLYPHS.length)]
+      )
+    )
+  );
+
   const [isResolved, setIsResolved] = useState(false);
   const frameRef = useRef(null);
+
+  // Responsive font size calculation based on Doto 0.60em advance with -5px reduction
+  useEffect(() => {
+    const updateSizes = () => {
+      if (!containerRef.current) return;
+      const w = containerRef.current.clientWidth;
+      // Doto 900 advance = 0.60em
+      // Desktop: 19 characters * 0.60 = 11.4em -> font size = (w / 11.4) - 5px
+      // Mobile: 11 characters * 0.60 = 6.6em -> font size = (w / 6.6) - 5px
+      if (w > 0) {
+        setFontSize(Math.max(14, Math.round((w / 11.4) - 5)));
+        setMobFontSize(Math.max(12, Math.round((w / 6.6) - 5)));
+      }
+    };
+
+    updateSizes();
+    window.addEventListener('resize', updateSizes);
+    return () => window.removeEventListener('resize', updateSizes);
+  }, []);
 
   useEffect(() => {
     // Check prefers-reduced-motion
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setDisplayChars(FULL_TITLE.split(''));
+      setDesktopChars(DESKTOP_LINES.map((line) => line.split('')));
+      setMobileChars(MOBILE_LINES.map((line) => line.split('')));
       setIsResolved(true);
       return;
     }
 
     const startTime = performance.now();
     const duration = 1200; // 1.2s per specification
-    const length = FULL_TITLE.length;
+    const desktopStagger = 120; // line 2 starts 120ms after line 1
+    const mobileStagger = 100;
 
     const tick = (now) => {
       const elapsed = now - startTime;
-      const progress = Math.min(1, elapsed / duration);
-      // Leading wave position across the string
-      const wipeIndex = Math.floor(progress * (length + 4));
 
-      const updated = FULL_TITLE.split('').map((char, index) => {
-        if (char === ' ') return ' ';
-
-        if (index < wipeIndex - 2) {
-          // Resolved to final letter
-          return char;
-        } else if (index <= wipeIndex + 2) {
-          // In the noise wave zone
-          return NOISE_GLYPHS[Math.floor(Math.random() * NOISE_GLYPHS.length)];
-        } else {
-          // Waiting to be wiped - random subtle noise
-          return NOISE_GLYPHS[Math.floor(Math.random() * 4)];
+      // 1. Update Desktop Lines
+      const updatedDesktop = DESKTOP_LINES.map((line, lineIdx) => {
+        const lineStart = lineIdx * desktopStagger;
+        if (elapsed < lineStart) {
+          return line.split('').map((char) =>
+            char === ' ' ? ' ' : NOISE_GLYPHS[Math.floor(Math.random() * 4)]
+          );
         }
+
+        const lineElapsed = elapsed - lineStart;
+        const progress = Math.min(1, lineElapsed / duration);
+        const wipeIndex = Math.floor(progress * (line.length + 3));
+
+        return line.split('').map((char, charIdx) => {
+          if (char === ' ') return ' ';
+          if (charIdx < wipeIndex - 2) {
+            return char;
+          } else if (charIdx <= wipeIndex + 2) {
+            return NOISE_GLYPHS[Math.floor(Math.random() * NOISE_GLYPHS.length)];
+          } else {
+            return NOISE_GLYPHS[Math.floor(Math.random() * 4)];
+          }
+        });
       });
 
-      setDisplayChars(updated);
+      // 2. Update Mobile Lines
+      const updatedMobile = MOBILE_LINES.map((line, lineIdx) => {
+        const lineStart = lineIdx * mobileStagger;
+        if (elapsed < lineStart) {
+          return line.split('').map((char) =>
+            char === ' ' ? ' ' : NOISE_GLYPHS[Math.floor(Math.random() * 4)]
+          );
+        }
 
-      if (progress < 1) {
+        const lineElapsed = elapsed - lineStart;
+        const progress = Math.min(1, lineElapsed / duration);
+        const wipeIndex = Math.floor(progress * (line.length + 3));
+
+        return line.split('').map((char, charIdx) => {
+          if (char === ' ') return ' ';
+          if (charIdx < wipeIndex - 2) {
+            return char;
+          } else if (charIdx <= wipeIndex + 2) {
+            return NOISE_GLYPHS[Math.floor(Math.random() * NOISE_GLYPHS.length)];
+          } else {
+            return NOISE_GLYPHS[Math.floor(Math.random() * 4)];
+          }
+        });
+      });
+
+      setDesktopChars(updatedDesktop);
+      setMobileChars(updatedMobile);
+
+      const maxDuration = duration + Math.max(desktopStagger, mobileStagger * 3);
+      if (elapsed < maxDuration) {
         frameRef.current = requestAnimationFrame(tick);
       } else {
-        setDisplayChars(FULL_TITLE.split(''));
+        setDesktopChars(DESKTOP_LINES.map((line) => line.split('')));
+        setMobileChars(MOBILE_LINES.map((line) => line.split('')));
         setIsResolved(true);
       }
     };
@@ -77,35 +149,54 @@ export default function TitleWipe({ className = '' }) {
     };
   }, []);
 
-  const word1Chars = displayChars.slice(0, WORD1.length);
-  const word2Chars = displayChars.slice(WORD1.length + 1);
-
   return (
     <h1
-      className={`font-doto font-black uppercase select-none tracking-tight leading-[0.85] text-[var(--text-primary)] w-full overflow-visible ${className}`}
-      aria-label={ACCESSIBLE_LABEL}
+      ref={containerRef}
+      className={`font-doto font-black uppercase select-none tracking-tight leading-[0.88] text-[var(--text-primary)] w-full overflow-hidden ${className}`}
+      aria-label={FULL_SENTENCE}
     >
+      {/* ── Desktop Presentation (>= 768px): 2 Lines (Reduced by 5px) ──────── */}
       <span
         aria-hidden="true"
-        className="w-full flex flex-col md:flex-row md:items-baseline md:justify-between gap-y-2 md:gap-y-0 text-[clamp(2.5rem,8.4vw,11.2rem)] md:w-[calc(100%+2vw)] md:-mr-[2vw]"
+        className="hidden md:flex flex-col items-start w-full whitespace-pre"
+        style={{
+          fontSize: fontSize ? `${fontSize}px` : 'calc(clamp(3.8rem, calc((100vw - 5rem) / 11.4), 10.1rem) - 5px)',
+        }}
       >
-        {/* Word 1: PQCHS (Pinned Left) */}
-        <span className="inline-flex tracking-[-0.04em] whitespace-nowrap">
-          {word1Chars.map((ch, i) => (
-            <span key={i} className="inline-block transition-colors duration-75">
-              {ch}
-            </span>
-          ))}
-        </span>
+        {desktopChars.map((lineChars, lineIdx) => (
+          <span key={lineIdx} className="block w-fit whitespace-pre">
+            {lineChars.map((ch, charIdx) => (
+              <span
+                key={charIdx}
+                className="inline-block transition-colors duration-75"
+              >
+                {ch === ' ' ? '\u00A0' : ch}
+              </span>
+            ))}
+          </span>
+        ))}
+      </span>
 
-        {/* Word 2: ENVIRONMENT (Pinned Right, Bleeds slightly past right edge) */}
-        <span className="inline-flex tracking-[-0.04em] whitespace-nowrap">
-          {word2Chars.map((ch, i) => (
-            <span key={i} className="inline-block transition-colors duration-75">
-              {ch}
-            </span>
-          ))}
-        </span>
+      {/* ── Mobile Presentation (< 768px): 4 Lines (Reduced by 5px) ────────── */}
+      <span
+        aria-hidden="true"
+        className="flex md:hidden flex-col items-start w-full whitespace-pre"
+        style={{
+          fontSize: mobFontSize ? `${mobFontSize}px` : 'calc(clamp(2.5rem, calc((100vw - 3rem) / 6.6), 4.2rem) - 5px)',
+        }}
+      >
+        {mobileChars.map((lineChars, lineIdx) => (
+          <span key={lineIdx} className="block w-fit whitespace-pre">
+            {lineChars.map((ch, charIdx) => (
+              <span
+                key={charIdx}
+                className="inline-block transition-colors duration-75"
+              >
+                {ch === ' ' ? '\u00A0' : ch}
+              </span>
+            ))}
+          </span>
+        ))}
       </span>
     </h1>
   );

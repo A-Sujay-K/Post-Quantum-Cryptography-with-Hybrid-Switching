@@ -41,3 +41,17 @@ async def test_determine_lane_switching(custom_settings):
     
     # Case 3: QTL = 0.30, but S = 0.90 (>= S_CRIT 0.85) -> CRITICAL override!
     assert determine_lane(0.30, 0.80, 0.90, custom_settings.S_CRIT) == LANE_CRITICAL
+
+def test_tiered_sensitivity_scoring():
+    from app.utils.sensitivity import get_sensitivity_score
+    # Low tier
+    assert get_sensitivity_score(None, "hello there team, let's schedule a meeting") == 0.15
+    assert get_sensitivity_score("team_photo.jpg", "routine photo") == 0.25
+    # Medium tier
+    assert get_sensitivity_score(None, "please review the financial quarterly audit") == 0.50
+    assert get_sensitivity_score("quarterly_report.pdf", "report") == 0.45
+    # High tier
+    assert get_sensitivity_score(None, "here is the password for the account") == 0.85
+    assert get_sensitivity_score("keys.env", "secret") == 0.85
+    # High security override
+    assert get_sensitivity_score(None, "ordinary message", high_security=True) == 0.95

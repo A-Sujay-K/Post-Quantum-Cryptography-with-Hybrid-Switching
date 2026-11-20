@@ -149,38 +149,38 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Line 2: PQC Algorithm (Stagger 1) with Teal Dot */}
-            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-4 sm:pl-10 md:pl-16 lg:pl-20 text-[var(--text-primary)] group cursor-pointer">
+            {/* Line 2: PQC Full Form (Stagger 1) with Teal Dot */}
+            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-2 sm:pl-4 md:pl-6 lg:pl-8 text-[var(--text-primary)] group cursor-pointer">
               <span className="text-[var(--text-tertiary)] mr-2">/</span>
               <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[var(--col-standard)] mr-2.5 align-middle opacity-90 group-hover:scale-125 transition-transform" />
               <ScrambleText
-                text="PQC"
-                hoverText="ML-KEM-768 + ML-DSA-65"
+                text="PQC — POST-QUANTUM CRYPTOGRAPHY"
+                hoverText="ML-KEM-768 + ML-DSA-65 (NIST FIPS 203 / 204)"
                 delay={450}
                 duration={500}
                 className="hover:text-[var(--col-standard)] transition-colors"
               />
             </div>
 
-            {/* Line 3: QKD / OTP (Stagger 2) with Amber Dot */}
-            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-8 sm:pl-20 md:pl-32 lg:pl-40 text-[var(--text-primary)] group cursor-pointer">
+            {/* Line 3: QKD Full Form (Stagger 2) with Amber Dot */}
+            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-4 sm:pl-8 md:pl-12 lg:pl-14 text-[var(--text-primary)] group cursor-pointer">
               <span className="text-[var(--text-tertiary)] mr-2">/</span>
               <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[var(--col-critical)] mr-2.5 align-middle opacity-90 group-hover:scale-125 transition-transform" />
               <ScrambleText
-                text="QKD"
-                hoverText="256-BIT ONE-TIME KEYS . SIMULATED"
+                text="QKD — QUANTUM KEY DISTRIBUTION"
+                hoverText="256-BIT ONE-TIME KEYS · SIMULATED OTP"
                 delay={700}
                 duration={500}
                 className="hover:text-[var(--col-critical)] transition-colors"
               />
             </div>
 
-            {/* Line 4: Dynamic Switching (Stagger 3) */}
-            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-12 sm:pl-28 md:pl-44 lg:pl-56 text-[var(--text-primary)] group cursor-pointer">
+            {/* Line 4: Dynamic Switching — Standard for Digital Security (Stagger 3) */}
+            <div className="text-xs sm:text-sm md:text-base lg:text-lg tracking-wide uppercase font-mono-light pl-6 sm:pl-12 md:pl-16 lg:pl-20 text-[var(--text-primary)] group cursor-pointer">
               <span className="text-[var(--text-tertiary)] mr-2">/</span>
               <ScrambleText
-                text="SWITCHING"
-                hoverText={`Q_TL >= ${CRITICAL_THRESHOLD} -> CRITICAL LANE`}
+                text="HYBRIDE SWITCHING -> A NEW STANDARD FOR DIGITAL SECURITY."
+                hoverText={`Q_TL >= ${CRITICAL_THRESHOLD} -> CRITICAL LANE (AUTHENTICATED OTP)`}
                 delay={950}
                 duration={500}
                 className="hover:text-[var(--text-primary)] underline decoration-[var(--edge-rest)] hover:decoration-[var(--col-standard)] transition-colors"
