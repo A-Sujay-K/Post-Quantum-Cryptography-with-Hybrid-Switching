@@ -1,4 +1,7 @@
+import json
 from functools import lru_cache
+from typing import Union
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -19,8 +22,21 @@ class Settings(BaseSettings):
     S_CRIT: float = 0.85
     DELIVERY_DEADLINE: float = 5.0
     MAX_FILE_SIZE_MB: int = 25
-    CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:5174"]
+    CORS_ORIGINS: Union[list[str], str] = ["http://localhost:5173", "http://localhost:5174"]
     LOG_LEVEL: str = "INFO"
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v):
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("[") and v.endswith("]"):
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
 
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8', extra='ignore')
 

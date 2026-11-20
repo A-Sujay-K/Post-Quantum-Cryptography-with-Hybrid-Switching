@@ -18,10 +18,16 @@ class WebSocketManager {
       this.ws.close();
     }
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host;
-    // Assuming backend is on port 8000 during dev, or proxied in prod
-    const wsUrl = `${protocol}//${host}/ws/chat/${token}`;
+    const wsBase = import.meta.env.VITE_WS_URL;
+    let wsUrl;
+    if (wsBase) {
+      const cleanBase = wsBase.replace(/\/+$/, '');
+      wsUrl = `${cleanBase}/chat/${token}`;
+    } else {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      wsUrl = `${protocol}//${host}/ws/chat/${token}`;
+    }
     
     this.ws = new WebSocket(wsUrl);
 

@@ -53,9 +53,15 @@ export class TelemetryWebSocket {
 }
 
 export const createTelemetryConnection = (onMessage, onStatusChange) => {
-  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  // Use current host to match the vite proxy, or fallback
-  const url = `${protocol}//${window.location.host}/ws/telemetry`;
+  const wsBase = import.meta.env.VITE_WS_URL;
+  let url;
+  if (wsBase) {
+    const cleanBase = wsBase.replace(/\/+$/, '');
+    url = `${cleanBase}/telemetry`;
+  } else {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    url = `${protocol}//${window.location.host}/ws/telemetry`;
+  }
   const connection = new TelemetryWebSocket(url, onMessage, onStatusChange);
   connection.connect();
   return connection;
