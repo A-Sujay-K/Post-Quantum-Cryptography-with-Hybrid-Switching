@@ -62,3 +62,11 @@ audit_*.cjs
 inspect.cjs
 lint_theme.cjs
 verify_*.cjs
+scripts/audit-*.cjs
+scripts/capture_*.cjs
+scripts/test_*.cjs
+scripts/sweep-*.cjs
+scripts/run_live_check.cjs
+scripts/generate_side_by_side.py
+scripts/build_hero_assets.py
+scripts/prepare_hero_assets.py
