@@ -1,4 +1,4 @@
-# Adaptive Hybrid Post-Quantum Secure Communication System
+# Post-Quantum Cryptography with Hybrid Switching (PQCHS)
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)
