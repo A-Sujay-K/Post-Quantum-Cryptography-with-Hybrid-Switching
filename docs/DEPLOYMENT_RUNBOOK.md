@@ -55,7 +55,7 @@ Navigate to **Security ➔ Network Access**:
 * **Parameter Name**: `MONGODB_URI`
 * **Full Assembled Value**:
   ```text
-  mongodb+srv://pqc_prod_user:<STRONG_RANDOM_PASSWORD>@cluster0.tf6kl4m.mongodb.net/pqc_secure_comm?retryWrites=true&w=majority
+  mongodb+srv://<DB_USERNAME>:<DB_PASSWORD>@<CLUSTER_HOST>/pqc_secure_comm?retryWrites=true&w=majority
   ```
 
 ---
@@ -108,7 +108,7 @@ Add the following key-value pairs under the **Environment Variables** tab:
 
 | Variable Name | Required Value | Description |
 | :--- | :--- | :--- |
-| `MONGODB_URI` | `mongodb+srv://pqc_prod_user:<STRONG_RANDOM_PASSWORD>@cluster0.tf6kl4m.mongodb.net/pqc_secure_comm?retryWrites=true&w=majority` | Connection to Atlas M0 cluster |
+| `MONGODB_URI` | `mongodb+srv://<DB_USERNAME>:<DB_PASSWORD>@<CLUSTER_HOST>/pqc_secure_comm?retryWrites=true&w=majority` | Connection to Atlas M0 cluster |
 | `MONGODB_DB_NAME` | `pqc_secure_comm` | Database name for collections |
 | `REDIS_URI` | `rediss://default:<UPSTASH_PASSWORD>@<UPSTASH_ENDPOINT>.upstash.io:6379` | TLS Upstash connection string |
 | `JWT_SECRET` | `<GENERATE_RANDOM_32_BYTE_HEX>` | 32-byte production HMAC secret |
@@ -184,7 +184,7 @@ Under **Environment Variables**, add:
 To populate your cloud database with demo accounts (Alice, Bob, Charlie, Examiner, Supervisor):
 ```bash
 # Run locally pointing to your cloud MongoDB:
-python infra/scripts/seed_users.py --uri "mongodb+srv://pqc_prod_user:<STRONG_RANDOM_PASSWORD>@cluster0.tf6kl4m.mongodb.net/pqc_secure_comm?retryWrites=true&w=majority"
+python infra/scripts/seed_users.py --uri "mongodb+srv://<DB_USERNAME>:<DB_PASSWORD>@<CLUSTER_HOST>/pqc_secure_comm?retryWrites=true&w=majority"
 ```
 
 ### 7.2 Backend Health Check
