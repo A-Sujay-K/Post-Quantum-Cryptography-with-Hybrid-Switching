@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: pqc-secure-comm-backend
+    runtime: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --app-dir backend
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: MONGODB_DB_NAME
+        value: pqc_secure_comm
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_EXPIRY_MINUTES
+        value: "60"
+      - key: QKD_GENERATION_INTERVAL
+        value: "12"
+      - key: THREAT_THRESHOLD
+        value: "0.8"
+      - key: W1
+        value: "0.6"
+      - key: W2
+        value: "0.4"
+      - key: W3
+        value: "0.0"
+      - key: K_MAX
+        value: "25"
+      - key: TAU_MIN
+        value: "0.4"
+      - key: TAU_MAX
+        value: "0.8"
+      - key: S_CRIT
+        value: "0.85"
+      - key: DELIVERY_DEADLINE
+        value: "5.0"
+      - key: MAX_FILE_SIZE_MB
+        value: "25"
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: LOG_LEVEL
+        value: INFO
